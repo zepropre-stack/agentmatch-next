@@ -1,43 +1,77 @@
 import Link from 'next/link'
-import type { Mission } from '@/types'
 
-const timeAgo = (date: string) => {
-  const diff = Date.now() - new Date(date).getTime()
-  const d = Math.floor(diff / 86400000)
-  if (d === 0) return 'Aujourd\'hui'
-  if (d === 1) return 'Hier'
-  if (d < 7) return `Il y a ${d} jours`
-  return `Il y a ${Math.floor(d / 7)} semaines`
+interface MissionCardProps {
+  mission: {
+    id: string
+    title: string
+    sector: string
+    location: string
+    remote?: boolean
+    daily_rate_min?: number
+    daily_rate_max?: number
+    skills_required?: string[]
+    created_at: string
+    featured?: boolean
+    company_profiles?: { name: string; sector: string; logo_url?: string }
+  }
 }
 
-export default function MissionCard({ mission }: { mission: Mission }) {
-  const company = (mission as { company_profiles?: { name: string; sector: string; logo_url?: string } }).company_profiles
+export default function MissionCard({ mission }: MissionCardProps) {
+  const company = mission.company_profiles
+  const days = Math.floor((Date.now() - new Date(mission.created_at).getTime()) / 86400000)
+  const timeAgo = days === 0 ? "Aujourd'hui" : days === 1 ? 'Hier' : `Il y a ${days}j`
 
   return (
     <Link href={`/missions/${mission.id}`} style={{ textDecoration: 'none' }}>
-      <div className="card" style={{ padding: 24, cursor: 'pointer', position: 'relative' }}>
+      <div className="card" style={{ padding: 24, cursor: 'pointer', position: 'relative', transition: 'box-shadow 0.2s' }}>
         {mission.featured && (
           <div style={{ position: 'absolute', top: 16, right: 16 }}>
-            <span style={{ background: 'linear-gradient(135deg,#d97706,#f59e0b)', color: 'white', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>⭐ Mise en avant</span>
+            <span style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: 'white', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6 }}>
+              ⭐ Featured
+            </span>
           </div>
         )}
-        <div style={{ display: 'flex', gap: 14, marginBottom: 14 }}>
-          <div style={{ width: 48, height: 48, background: 'linear-gradient(135deg,#1e40af,#7c3aed)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>{company?.logo_url ? <img src={company.logo_url} style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'contain' }} alt="" /> : '🏢']}</div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: 16, color: '#e2e8f0', marginBottom: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mission.title}</div>
-            <div style={{ color: '#60a5fa', fontSize: 14, fontWeight: 500 }}>{company?.name || 'Entreprise confidentielle'}</div>
+
+        {company && (
+          <p style={{ fontSize: 13, color: '#9ca3af', marginBottom: 6 }}>{company.name}</p>
+        )}
+        <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1e293b', marginBottom: 10 }}>
+          {mission.title}
+        </h3>
+
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+          <span style={{ background: '#eef2ff', color: '#6366f1', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
+            {mission.sector}
+          </span>
+          <span style={{ background: '#f0fdf4', color: '#166534', padding: '3px 10px', borderRadius: 20, fontSize: 12 }}>
+            {mission.location}
+          </span>
+          {mission.remote && (
+            <span style={{ background: '#fef3c7', color: '#92400e', padding: '3px 10px', borderRadius: 20, fontSize: 12 }}>
+              Remote
+            </span>
+          )}
+        </div>
+
+        {(mission.daily_rate_min || mission.daily_rate_max) && (
+          <p style={{ fontSize: 16, fontWeight: 700, color: '#6366f1', marginBottom: 12 }}>
+            {mission.daily_rate_min && mission.daily_rate_max
+              ? `${mission.daily_rate_min}€–${mission.daily_rate_max}€/j`
+              : `${mission.daily_rate_min || mission.daily_rate_max}€/j`}
+          </p>
+        )}
+
+        {mission.skills_required && mission.skills_required.length > 0 && (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+            {mission.skills_required.slice(0, 4).map((s: string) => (
+              <span key={s} style={{ background: '#f3f4f6', color: '#6b7280', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>
+                {s}
+              </span>
+            ))}
           </div>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
-          <span style={{ background: 'rgba(37,99,235,0.15)', color: '#60a5fa', padding: '3px 10px', borderRadius: 20, fontSize: 12, border: '1px solid rgba(37,99,235,0.2)' }}>{mission.sector}</span>
-          <span style={{ background: '#0d1633', color: '#94a3b8', padding: '3px 10px', borderRadius: 20, fontSize: 12, border: '1px solid #1e3060' }}>📍 {mission.region}</span>
-          {mission.remote && <span style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', padding: '3px 10px', borderRadius: 20, fontSize: 12, border: '1px solid rgba(124,58,237,0.2)' }}>Remote</span>}
-        </div>
-        <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.6, margin: '0 0 14px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{mission.description}</p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid #1e3060' }}>
-          <div style={{ color: '#475569', fontSize: 13 }}>{timeAgo(mission.created_at)}</div>
-          {mission.commission && <div style={{ color: '#f59e0b', fontSize: 14, fontWeight: 700 }}>{mission.commission}</div>}
-        </div>
+        )}
+
+        <p style={{ fontSize: 12, color: '#9ca3af' }}>{timeAgo}</p>
       </div>
     </Link>
   )
