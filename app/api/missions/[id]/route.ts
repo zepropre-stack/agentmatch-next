@@ -6,7 +6,7 @@ export async function GET(_:NextRequest,{params}:{params:{id:string}}) {
   if(error||!data)return NextResponse.json({error:'Mission introuvable'},{status:404})
   return NextResponse.json(data)
 }
-export async function PUT(req:NextRequest,{params}:{{params:{id:string}}) {
+export async function PUT(req:NextRequest,{params}: {params: {id: string}}) {
   const supabase=await createClient()
   const {data:{user}}=await supabase.auth.getUser()
   if(!user)return NextResponse.json({error:'Non authentifié'},{status:401})
@@ -20,7 +20,7 @@ export async function PUT(req:NextRequest,{params}:{{params:{id:string}}) {
   if(error)return NextResponse.json({error:error.message},{status:400})
   return NextResponse.json(data)
 }
-export async function DELETE(_:NextRequest,{params}:{{params:{id:string}}) {
+export async function DELETE(_:NextRequest,{params}: {params: {id: string}}) {
   const supabase=await createClient()
   const {data:{user}}=await supabase.auth.getUser()
   if(!user)return NextResponse.json({error:'Non authentifié'},{status:401})
