@@ -54,6 +54,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 .logo-text { font-size: 20px; font-weight: 800; background: linear-gradient(90deg, var(--blue3), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .logo-badge { font-size: 10px; font-weight: 700; background: var(--gold); color: #000; padding: 2px 6px; border-radius: 4px; -webkit-text-fill-color: #000; }
 .nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-auth-only { display: none !important; }
+.logged-in .nav-auth-only { display: inline-flex !important; }
 .nav-link { padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text2); cursor: pointer; transition: all .2s; border: none; background: none; }
 .nav-link:hover, .nav-link.active { color: var(--text); background: var(--card); }
 .nav-ctas { display: flex; align-items: center; gap: 8px; }
@@ -499,8 +501,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
     <button class="nav-link" onclick="showPage('agents');setActive(this)">Agents</button>
     <button class="nav-link" onclick="showPage('match');setActive(this)">✨ IA Matching</button>
     <button class="nav-link" onclick="showPage('pricing');setActive(this)">💼 Tarifs</button>
-    <button class="nav-link" onclick="showPage('dashboard');setActive(this)">Dashboard</button>
-    <button class="nav-link" onclick="showPage('chat');setActive(this)">💬 Assistant IA</button>
+    <button class="nav-link nav-auth-only" onclick="showPage('dashboard');setActive(this)">Dashboard</button>
+    <button class="nav-link nav-auth-only" onclick="showPage('chat');setActive(this)">💬 Assistant IA</button>
   </div>
   <div class="nav-ctas">
     <button class="btn btn-ghost btn-sm" onclick="showModal('login')">Se connecter</button>
@@ -3256,6 +3258,7 @@ function initDash() {
 
 // ─── NAV ADAPTATIVE ───
 function updateNavForUser(user) {
+  document.body.classList.add('logged-in');
   const loginBtn = document.querySelector('[onclick="showModal(\'login\')"]');
   if (loginBtn) {
     const name = (user && user.profile && user.profile.firstName) || (user && user.email && user.email.split('@')[0]) || 'Mon compte';
@@ -3266,6 +3269,7 @@ function updateNavForUser(user) {
 
 function logout() {
   Auth.clear();
+  document.body.classList.remove('logged-in');
   showToast('Deconnecte.', 'info');
   setTimeout(function(){ location.reload(); }, 800);
 }
