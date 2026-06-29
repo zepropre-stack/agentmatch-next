@@ -505,7 +505,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
   <div class="nav-ctas">
     <button class="btn btn-ghost btn-sm" onclick="showModal('login')">Se connecter</button>
     <button class="btn btn-green btn-sm" onclick="showModal('signup-agent')" style="background:var(--green);color:white">👤 Je suis agent — Gratuit</button>
-    <button class="btn btn-primary btn-sm" onclick="showPage(\'pricing\');setActiveByPage(\'pricing\')">🏢 Entreprise</button>
+    <button class="btn btn-primary btn-sm" onclick="showPage('pricing');setActiveByPage('pricing')">🏢 Entreprise</button>
   </div>
 </nav>
 <!-- RÉSEAU DE NEURONES CSS (toujours visible, 0 JS) -->
@@ -2640,7 +2640,7 @@ function processAIInput(text) {
         const msgs = document.getElementById('ai-chat-messages');
         const action = document.createElement('div');
         action.style.cssText = 'align-self:center;margin:4px 0';
-        action.innerHTML = '<button onclick="toggleAIChat();showPage('pricing');setActiveByPage('pricing')" style="background:linear-gradient(135deg,#10b981,#2563eb);color:white;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600">💼 Voir toutes les offres →</button>';
+        action.innerHTML = '<button onclick="toggleAIChat();showPage(\'pricing\');setActiveByPage(\'pricing\')" style="background:linear-gradient(135deg,#10b981,#2563eb);color:white;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600">💼 Voir toutes les offres →</button>';
         msgs.appendChild(action);
         msgs.scrollTop = msgs.scrollHeight;
       }, 400);
@@ -3284,5 +3284,4 @@ function openMissionDetail(id) { showToast('Fiche mission chargee !', 'info'); }
 </script>
 
 </body>
-</html>
-
+</
