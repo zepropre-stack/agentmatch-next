@@ -781,6 +781,10 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 
 }
 
+  /* ── Stories / témoignages grids inline → 1 col ── */
+  .stories-grid { grid-template-columns: 1fr !important; }
+  .plans-compare-grid { grid-template-columns: 1fr !important; }
+
   /* ── Pricing page wrapper ── */
   .pricing-page-wrapper { padding: 32px 14px !important; }
   h1[style*="font-size:44px"] { font-size: 26px !important; }
@@ -1260,7 +1264,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
     </div>
 
     <!-- 3 Success stories entreprises -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px">
+    <div class="stories-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px">
 
       <!-- Story 1 — Nextera Solutions -->
       <div class="reveal" style="background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)';this.style.borderColor='var(--blue2)'" onmouseleave="this.style.transform='';this.style.borderColor='var(--border)'">
@@ -1380,7 +1384,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
     <!-- Témoignages agents (row compacte) -->
     <div style="margin-bottom:40px">
       <div style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;text-align:center">Les agents aussi parlent</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div class="stories-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
 
         <div class="reveal" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px">
           <div style="color:var(--gold);font-size:12px;margin-bottom:10px">★★★★★</div>
@@ -2658,7 +2662,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         <div id="co-factu-sub" class="dash-sub">Plan Business · 219€/mois · Renouvellement le 1er juillet</div>
 
         <!-- Plans comparatifs -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+        <div class="plans-compare-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
           <!-- Starter -->
           <div id="co-plan-starter" style="background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;opacity:0.6">
             <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:8px">STARTER</div>
