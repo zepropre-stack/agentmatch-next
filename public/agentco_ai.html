@@ -34,6 +34,35 @@ html { overflow-x: hidden; max-width: 100%; }
 body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; overflow-x: hidden; max-width: 100%; touch-action: manipulation; }
 /* neural-bg handles home page visual background */
 
+/* MESSAGERIE */
+.msg-layout { display:grid; grid-template-columns:280px 1fr; height:calc(100vh - 160px); min-height:500px; background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.msg-threads { border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.msg-threads-header { padding:16px; border-bottom:1px solid var(--border); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:space-between; }
+.msg-thread-item { padding:14px 16px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.04); transition:background .15s; display:flex; gap:10px; align-items:center; }
+.msg-thread-item:hover { background:var(--bg2); }
+.msg-thread-item.active { background:rgba(37,99,235,0.1); border-left:2px solid var(--blue2); }
+.msg-thread-item.unread .msg-thread-name { color:white; font-weight:700; }
+.msg-thread-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; color:white; font-size:13px; flex-shrink:0; }
+.msg-thread-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.msg-thread-preview { font-size:11px; color:var(--text3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px; }
+.msg-thread-meta { margin-left:auto; text-align:right; flex-shrink:0; }
+.msg-thread-time { font-size:10px; color:var(--text3); margin-bottom:4px; }
+.msg-unread-dot { width:8px; height:8px; background:var(--blue2); border-radius:50%; margin-left:auto; }
+.msg-view { display:flex; flex-direction:column; overflow:hidden; }
+.msg-view-header { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.msg-messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.msg-bubble { max-width:70%; padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.6; position:relative; }
+.msg-bubble.sent { background:linear-gradient(135deg,var(--blue),#1d4ed8); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
+.msg-bubble.recv { background:var(--bg3); color:var(--text); align-self:flex-start; border-bottom-left-radius:4px; border:1px solid var(--border); }
+.msg-bubble-time { font-size:10px; opacity:0.6; margin-top:4px; display:block; }
+.msg-input-area { padding:14px 16px; border-top:1px solid var(--border); display:flex; gap:10px; align-items:center; }
+.msg-input { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:24px; padding:10px 16px; color:var(--text); font-size:13px; outline:none; transition:border-color .2s; }
+.msg-input:focus { border-color:var(--blue2); }
+.msg-send-btn { width:38px; height:38px; background:var(--blue); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; color:white; font-size:16px; flex-shrink:0; transition:all .2s; }
+.msg-send-btn:hover { background:var(--blue2); transform:scale(1.05); }
+.msg-typing { font-size:11px; color:var(--text3); font-style:italic; padding:0 20px 8px; }
+@media(max-width:700px){ .msg-layout { grid-template-columns:1fr; } .msg-threads { display:none; } }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
@@ -1426,6 +1455,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         <button class="sidebar-link" onclick="showDash('missions-dash',this)">📋 Mes missions <span class="badge">3</span></button>
         <button class="sidebar-link" onclick="showDash('ia-reco',this)">✨ Recommandations IA <span class="badge">8</span></button>
         <button class="sidebar-link" onclick="showDash('notifs',this)">🔔 Notifications <span class="badge">5</span></button>
+        <button class="sidebar-link" onclick="showDash('messages',this);openThread('thread-1','agent')">💬 Messagerie <span class="badge" id="agent-msg-badge">3</span></button>
         <button class="sidebar-link" onclick="showDash('profil',this)">👤 Mon profil IA</button>
       </div>
       <div class="sidebar-section">
@@ -1585,6 +1615,83 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         </div>
       </div>
 
+      <!-- MESSAGERIE AGENT -->
+      <div id="dash-messages" class="hidden">
+        <div class="dash-title">💬 Messagerie</div>
+        <div class="dash-sub">3 messages non lus · Conversations avec vos entreprises partenaires</div>
+        <div class="msg-layout">
+          <!-- Threads -->
+          <div class="msg-threads">
+            <div class="msg-threads-header">
+              Conversations
+              <span style="font-size:11px;background:var(--blue);color:white;padding:2px 8px;border-radius:10px">3 non lus</span>
+            </div>
+            <div style="overflow-y:auto;flex:1">
+              <div class="msg-thread-item unread active" onclick="openThread('thread-1','agent')" id="agent-t1">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)">N</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Nextera Solutions</div>
+                  <div class="msg-thread-preview">Parfait ! On peut démarrer lundi ?</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">10:32</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item unread" onclick="openThread('thread-2','agent')" id="agent-t2">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#78350f,#d97706)">☀</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">SolarTech SARL</div>
+                  <div class="msg-thread-preview">Bonjour Thomas, j'ai vu votre profil…</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">Hier</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item unread" onclick="openThread('thread-3','agent')" id="agent-t3">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">F</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">FinanceMax Courtage</div>
+                  <div class="msg-thread-preview">Votre score IA de 94% nous intéresse</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">Lun</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item" onclick="openThread('thread-4','agent')" id="agent-t4">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#065f46,#059669)">E</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">EcoTech Industrie</div>
+                  <div class="msg-thread-preview">Merci pour votre candidature 👍</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">22 juin</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Vue conversation -->
+          <div class="msg-view" id="agent-msg-view">
+            <div class="msg-view-header" id="agent-thread-header">
+              <div class="msg-thread-avatar" id="agent-thread-avatar" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)">N</div>
+              <div>
+                <div style="font-weight:700;font-size:14px" id="agent-thread-name">Nextera Solutions</div>
+                <div style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>En ligne</div>
+              </div>
+              <div style="margin-left:auto;font-size:12px;color:var(--text3)" id="agent-thread-mission">Mission : BDR SaaS B2B · Score 96%</div>
+            </div>
+            <div class="msg-messages" id="agent-msg-list"></div>
+            <div class="msg-typing hidden" id="agent-typing">Nextera Solutions est en train d'écrire…</div>
+            <div class="msg-input-area">
+              <input class="msg-input" id="agent-msg-input" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMsg('agent')">
+              <button class="msg-send-btn" onclick="sendMsg('agent')">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1656,6 +1763,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Gestion</div>
+        <button class="sidebar-link" onclick="showCompanyDash('co-messages',this);openThread('co-thread-1','company')">💬 Messagerie <span class="badge" id="co-msg-badge">4</span></button>
         <button class="sidebar-link" onclick="showCompanyDash('co-agents',this)">🤝 Mes agents actifs</button>
         <button class="sidebar-link" onclick="showCompanyDash('co-factu',this)">💳 Facturation</button>
       </div>
@@ -2230,6 +2338,95 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           </div>
           <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px;font-size:13px;color:var(--text2);text-align:center">
             Taux de conversion final : <b style="color:var(--green)">14,9%</b> · Benchmark plateforme : 8,3% · <b style="color:var(--green)">+79% au-dessus</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGERIE ENTREPRISE -->
+      <div id="co-messages" class="hidden">
+        <div class="dash-title">💬 Messagerie</div>
+        <div class="dash-sub">4 messages non lus · Échanges avec vos agents et candidats</div>
+        <div class="msg-layout">
+          <div class="msg-threads">
+            <div class="msg-threads-header">
+              Conversations
+              <span style="font-size:11px;background:var(--blue);color:white;padding:2px 8px;border-radius:10px">4 non lus</span>
+            </div>
+            <div style="overflow-y:auto;flex:1">
+              <div class="msg-thread-item unread active" onclick="openThread('co-thread-1','company')" id="co-t1">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed)">TM</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Thomas M. <span style="font-size:10px;color:var(--gold)">⭐ Score 96%</span></div>
+                  <div class="msg-thread-preview">Oui je suis disponible dès lundi !</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">10:34</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item unread" onclick="openThread('co-thread-2','company')" id="co-t2">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#059669,#0d9488)">SC</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Sophie C. <span style="font-size:10px;color:var(--blue3)">Score 93%</span></div>
+                  <div class="msg-thread-preview">Merci pour votre message, j'étudie…</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">Hier</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item unread" onclick="openThread('co-thread-3','company')" id="co-t3">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">KL</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Kevin L. <span style="font-size:10px;color:var(--purple2)">Score 91%</span></div>
+                  <div class="msg-thread-preview">Voici mon CV et mes références…</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">Lun</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item unread" onclick="openThread('co-thread-4','company')" id="co-t4">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#d97706,#dc2626)">LB</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Laura B. <span style="font-size:10px;color:var(--text3)">Score 87%</span></div>
+                  <div class="msg-thread-preview">Bonjour, je postule pour la mission…</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">22 juin</div>
+                  <div class="msg-unread-dot"></div>
+                </div>
+              </div>
+              <div class="msg-thread-item" onclick="openThread('co-thread-5','company')" id="co-t5">
+                <div class="msg-thread-avatar" style="background:linear-gradient(135deg,#065f46,#059669)">MR</div>
+                <div style="flex:1;min-width:0">
+                  <div class="msg-thread-name">Marc R. <span style="font-size:10px;color:var(--text3)">Score 84%</span></div>
+                  <div class="msg-thread-preview">D'accord, je reviens vers vous…</div>
+                </div>
+                <div class="msg-thread-meta">
+                  <div class="msg-thread-time">20 juin</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="msg-view" id="co-msg-view">
+            <div class="msg-view-header" id="co-thread-header">
+              <div class="msg-thread-avatar" id="co-thread-avatar" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed)">TM</div>
+              <div>
+                <div style="font-weight:700;font-size:14px" id="co-thread-name">Thomas M.</div>
+                <div style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>En ligne · Score IA 96%</div>
+              </div>
+              <div style="margin-left:auto;display:flex;gap:8px">
+                <button class="btn btn-sm btn-primary" onclick="showToast('📅 Entretien planifié avec Thomas M.','success')">Planifier entretien</button>
+                <button class="btn btn-sm btn-ghost" id="co-thread-mission-label">Mission BDR SaaS</button>
+              </div>
+            </div>
+            <div class="msg-messages" id="co-msg-list"></div>
+            <div class="msg-typing hidden" id="co-typing">Thomas M. est en train d'écrire…</div>
+            <div class="msg-input-area">
+              <input class="msg-input" id="co-msg-input" placeholder="Écrire un message à l'agent…" onkeydown="if(event.key==='Enter')sendMsg('company')">
+              <button class="msg-send-btn" onclick="sendMsg('company')">↑</button>
+            </div>
           </div>
         </div>
       </div>
@@ -4609,6 +4806,194 @@ function demoLogin(role) {
     showPage('dashboard');
     setActiveByPage('dashboard');
   }
+}
+
+// ═══════════════════════════════════════════════════
+// MESSAGERIE INTERNE
+// ═══════════════════════════════════════════════════
+
+const THREADS = {
+  // Agent side: voit les messages de ses entreprises
+  'thread-1': {
+    name: 'Nextera Solutions', avatar: 'N', mission: 'Mission : BDR SaaS B2B · Score 96%',
+    avatarBg: 'linear-gradient(135deg,#1e3a8a,#2563eb)', online: true,
+    messages: [
+      { sender: 'them', text: 'Bonjour Thomas ! Votre profil correspond exactement à notre besoin. Score IA de 96%, c\'est impressionnant.', time: '09:14' },
+      { sender: 'them', text: 'On cherche un BDR expérimenté en SaaS B2B sur l\'Île-de-France. Commission 17%, objectif 180K€ de CA sur 12 mois. Ça vous intéresse ?', time: '09:15' },
+      { sender: 'me', text: 'Bonjour ! Oui, ça correspond tout à fait à mon profil. J\'ai 8 ans d\'expérience en SaaS B2B et j\'ai généré 420K€ de CA l\'année dernière. Quelles sont les conditions exactes ?', time: '09:47' },
+      { sender: 'them', text: 'Excellent ! Commission de 17% sur le CA signé, payée mensuellement. Pas de cap. On a un cycle de vente de 2-3 mois en moyenne, panier moyen 35K€. Vous disposez d\'un accès CRM complet dès J+1.', time: '10:08' },
+      { sender: 'me', text: 'Ça me convient. Je suis disponible pour un appel cette semaine pour aller plus loin.', time: '10:21' },
+      { sender: 'them', text: 'Parfait ! On peut démarrer lundi ?', time: '10:32', unread: true },
+    ]
+  },
+  'thread-2': {
+    name: 'SolarTech SARL', avatar: '☀', mission: 'Mission : Closing Énergie · Score 89%',
+    avatarBg: 'linear-gradient(135deg,#78350f,#d97706)', online: false,
+    messages: [
+      { sender: 'them', text: 'Bonjour Thomas, j\'ai vu votre profil via le matching IA. Vous avez un score de 89% sur notre mission de closing en énergie solaire. Seriez-vous disponible pour en discuter ?', time: 'Hier 14:22', unread: true },
+    ]
+  },
+  'thread-3': {
+    name: 'FinanceMax Courtage', avatar: 'F', mission: 'Mission : AE Finance · Score 94%',
+    avatarBg: 'linear-gradient(135deg,#4c1d95,#7c3aed)', online: false,
+    messages: [
+      { sender: 'them', text: 'Votre score IA de 94% nous intéresse beaucoup. Nous cherchons un Account Executive en finance pour développer notre portefeuille grands comptes. Commission 20%.', time: 'Lun 11:05', unread: true },
+    ]
+  },
+  'thread-4': {
+    name: 'EcoTech Industrie', avatar: 'E', mission: 'Mission : BDR Industrie · Score 81%',
+    avatarBg: 'linear-gradient(135deg,#065f46,#059669)', online: false,
+    messages: [
+      { sender: 'me', text: 'Bonjour, je postule pour votre mission BDR Industrie. J\'ai une expérience significative dans le secteur.', time: '22 juin 09:30' },
+      { sender: 'them', text: 'Merci pour votre candidature 👍 Nous étudions votre profil et reviendrons vers vous d\'ici 48h.', time: '22 juin 15:12' },
+    ]
+  },
+  // Company side: voit les messages de ses agents
+  'co-thread-1': {
+    name: 'Thomas M.', avatar: 'TM', mission: 'Mission BDR SaaS B2B',
+    avatarBg: 'linear-gradient(135deg,#1d4ed8,#7c3aed)', online: true, score: '96%',
+    messages: [
+      { sender: 'me', text: 'Bonjour Thomas ! Votre profil correspond exactement à notre besoin. Score IA de 96%, c\'est impressionnant.', time: '09:14' },
+      { sender: 'me', text: 'On cherche un BDR expérimenté en SaaS B2B sur l\'Île-de-France. Commission 17%, objectif 180K€ de CA sur 12 mois. Ça vous intéresse ?', time: '09:15' },
+      { sender: 'them', text: 'Bonjour ! Oui, ça correspond tout à fait à mon profil. J\'ai 8 ans d\'expérience en SaaS B2B et j\'ai généré 420K€ de CA l\'année dernière. Quelles sont les conditions exactes ?', time: '09:47' },
+      { sender: 'me', text: 'Commission de 17% sur le CA signé, payée mensuellement. Pas de cap. Cycle de vente 2-3 mois, panier moyen 35K€. CRM complet dès J+1.', time: '10:08' },
+      { sender: 'them', text: 'Ça me convient. Je suis disponible pour un appel cette semaine.', time: '10:21' },
+      { sender: 'them', text: 'Oui je suis disponible dès lundi !', time: '10:34', unread: true },
+    ]
+  },
+  'co-thread-2': {
+    name: 'Sophie C.', avatar: 'SC', mission: 'Mission Closing Grands Comptes',
+    avatarBg: 'linear-gradient(135deg,#059669,#0d9488)', online: true, score: '93%',
+    messages: [
+      { sender: 'me', text: 'Bonjour Sophie, votre profil a été sélectionné par notre IA avec un score de 93% pour notre poste de Closing Grands Comptes. Commission 20%, remote OK. Intéressée ?', time: 'Hier 10:15' },
+      { sender: 'them', text: 'Merci pour votre message, j\'étudie votre offre. Pouvez-vous me préciser la taille des entreprises ciblées et le secteur ?', time: 'Hier 11:42', unread: true },
+    ]
+  },
+  'co-thread-3': {
+    name: 'Kevin L.', avatar: 'KL', mission: 'Mission BDR SaaS B2B',
+    avatarBg: 'linear-gradient(135deg,#7c3aed,#a855f7)', online: false, score: '91%',
+    messages: [
+      { sender: 'me', text: 'Bonjour Kevin, nous avons vu votre profil via AgentMatch. Score 91% sur notre mission BDR. Seriez-vous disponible ?', time: 'Lun 14:00' },
+      { sender: 'them', text: 'Voici mon CV et mes références clients. J\'ai notamment signé 2,1M€ de CA SaaS l\'année dernière.', time: 'Lun 16:30', unread: true },
+    ]
+  },
+  'co-thread-4': {
+    name: 'Laura B.', avatar: 'LB', mission: 'Mission Account Executive PACA',
+    avatarBg: 'linear-gradient(135deg,#d97706,#dc2626)', online: false, score: '87%',
+    messages: [
+      { sender: 'them', text: 'Bonjour, je postule pour la mission Account Executive en PACA. Mon profil immobilier correspond à vos critères.', time: '22 juin 09:00', unread: true },
+    ]
+  },
+  'co-thread-5': {
+    name: 'Marc R.', avatar: 'MR', mission: 'Mission BDR SaaS B2B',
+    avatarBg: 'linear-gradient(135deg,#065f46,#059669)', online: false, score: '84%',
+    messages: [
+      { sender: 'me', text: 'Bonjour Marc, votre profil nous intéresse pour la mission BDR SaaS.', time: '20 juin 11:00' },
+      { sender: 'them', text: 'D\'accord, je reviens vers vous d\'ici vendredi avec mes disponibilités.', time: '20 juin 15:45' },
+    ]
+  },
+};
+
+let currentThread = null;
+let msgAutoReplyTimeout = null;
+
+function openThread(threadId, dashType) {
+  const thread = THREADS[threadId];
+  if (!thread) return;
+  currentThread = { id: threadId, type: dashType };
+
+  const prefix = dashType === 'agent' ? 'agent' : 'co';
+  const listEl = document.getElementById(prefix + '-msg-list');
+  const nameEl = document.getElementById(prefix + '-thread-name');
+  const avatarEl = document.getElementById(prefix + '-thread-avatar');
+
+  // Update header
+  if (nameEl) nameEl.textContent = thread.name;
+  if (avatarEl) { avatarEl.textContent = thread.avatar; avatarEl.style.background = thread.avatarBg; }
+  if (dashType === 'agent') {
+    const missionEl = document.getElementById('agent-thread-mission');
+    if (missionEl) missionEl.textContent = thread.mission;
+  } else {
+    const missionEl = document.getElementById('co-thread-mission-label');
+    if (missionEl) missionEl.textContent = thread.mission;
+    const typingEl = document.getElementById('co-typing');
+    if (typingEl) typingEl.textContent = thread.name + ' est en train d\'écrire…';
+  }
+
+  // Render messages
+  if (listEl) {
+    listEl.innerHTML = '';
+    thread.messages.forEach(msg => renderMsg(listEl, msg));
+    listEl.scrollTop = listEl.scrollHeight;
+  }
+
+  // Mark thread as read
+  const threadEl = document.getElementById((dashType === 'agent' ? '' : 'co-') + (dashType === 'agent' ? threadId.replace('thread-','agent-t') : threadId.replace('co-thread-','co-t')));
+  // Simple approach: remove unread class from active item
+  const allItems = document.querySelectorAll((dashType === 'agent' ? '#dash-messages' : '#co-messages') + ' .msg-thread-item');
+  allItems.forEach(i => i.classList.remove('active'));
+  // find clicked item
+  const clickedId = (dashType === 'agent' ? '' : 'co-') + (dashType === 'agent'
+    ? 'agent-t' + threadId.split('-').pop()
+    : 'co-t' + threadId.split('-').pop());
+  const clickedEl = document.getElementById(clickedId);
+  if (clickedEl) { clickedEl.classList.add('active'); clickedEl.classList.remove('unread'); }
+
+  // Decrement badge
+  updateMsgBadge(dashType);
+}
+
+function renderMsg(container, msg) {
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;flex-direction:column;align-items:${msg.sender==='me'?'flex-end':'flex-start'}`;
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble ' + (msg.sender === 'me' ? 'sent' : 'recv');
+  bubble.innerHTML = msg.text + `<span class="msg-bubble-time">${msg.time}</span>`;
+  div.appendChild(bubble);
+  container.appendChild(div);
+}
+
+function sendMsg(dashType) {
+  const prefix = dashType === 'agent' ? 'agent' : 'co';
+  const inputEl = document.getElementById(prefix + '-msg-input');
+  const listEl = document.getElementById(prefix + '-msg-list');
+  const text = inputEl?.value?.trim();
+  if (!text || !currentThread) return;
+
+  inputEl.value = '';
+  const msg = { sender: 'me', text, time: new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}) };
+  renderMsg(listEl, msg);
+  listEl.scrollTop = listEl.scrollHeight;
+
+  // Auto-reply after delay
+  const typingEl = document.getElementById(prefix + '-typing');
+  if (typingEl) {
+    typingEl.classList.remove('hidden');
+    listEl.scrollTop = listEl.scrollHeight;
+  }
+  clearTimeout(msgAutoReplyTimeout);
+  const thread = THREADS[currentThread.id];
+  const replies = [
+    'Merci pour votre retour, je regarde ça de mon côté.',
+    'Parfait, je vous confirme ça rapidement.',
+    'Super ! On peut planifier un appel cette semaine ?',
+    'D\'accord, j\'envoie les documents demain matin.',
+    '👍 Noté, à bientôt !',
+  ];
+  msgAutoReplyTimeout = setTimeout(() => {
+    if (typingEl) typingEl.classList.add('hidden');
+    const reply = { sender: 'them', text: replies[Math.floor(Math.random()*replies.length)], time: new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}) };
+    renderMsg(listEl, reply);
+    listEl.scrollTop = listEl.scrollHeight;
+  }, 1500 + Math.random() * 1000);
+}
+
+function updateMsgBadge(dashType) {
+  const badgeId = dashType === 'agent' ? 'agent-msg-badge' : 'co-msg-badge';
+  const container = dashType === 'agent' ? '#dash-messages' : '#co-messages';
+  const unreadCount = document.querySelectorAll(container + ' .msg-thread-item.unread').length;
+  const badge = document.getElementById(badgeId);
+  if (badge) { badge.textContent = unreadCount; badge.style.display = unreadCount > 0 ? '' : 'none'; }
 }
 
 function applyCompanyPlan() {
