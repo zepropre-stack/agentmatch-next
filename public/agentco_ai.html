@@ -3130,7 +3130,7 @@ function tryCandidate(missionName) {
 function tryContact(agentName) {
   if (!Auth.isLoggedIn()) { showPage('pricing'); setActiveByPage('pricing'); return; }
   if (Auth.user()?.role !== 'COMPANY') { showToast('Seules les entreprises peuvent contacter un agent.', 'info'); return; }
-  showToast('💬 Mise en relation initiée avec ' + (agentName||'l'agent') + ' !', 'success');
+  showToast('💬 Mise en relation initiée avec ' + (agentName||'l\'agent') + ' !', 'success');
 }
 
 async function candidaterMission(missionId) {
