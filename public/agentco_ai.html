@@ -775,18 +775,184 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
+  <!-- HOW IT WORKS — REDESIGN -->
   <div class="section" style="position:relative;z-index:1">
-    <div class="section-label reveal">Comment ça marche</div>
-    <div class="section-title reveal">L'IA fait le travail à votre place</div>
-    <div class="section-sub reveal">Fini les heures à éplucher des profils. Notre IA analyse 47 critères pour vous proposer uniquement les candidats qui matchent vraiment.</div>
-    <div class="steps">
-      <div class="step reveal" style="--ri:0"><div class="step-num">01</div><div class="step-icon">📋</div><div class="ai-tag">IA</div><h3>Décrivez votre besoin</h3><p>En langage naturel ou via notre formulaire intelligent. L'IA comprend vos vraies attentes.</p></div>
-      <div class="step reveal" style="--ri:1"><div class="step-num">02</div><div class="step-icon">🧠</div><div class="ai-tag">IA</div><h3>Analyse intelligente</h3><p>Notre algorithme score 57 000 profils en 2 secondes sur 47 critères : secteur, région, CA généré, style de vente…</p></div>
-      <div class="step reveal" style="--ri:2"><div class="step-num">03</div><div class="step-icon">🎯</div><div class="ai-tag">IA</div><h3>Top 5 recommandés</h3><p>Vous recevez les 5 meilleurs profils avec leur score de compatibilité détaillé et une explication IA.</p></div>
-      <div class="step reveal" style="--ri:3"><div class="step-num">04</div><div class="step-icon">🚀</div><h3>Mise en relation</h3><p>Échangez directement, signez un contrat dématérialisé et suivez la collaboration en temps réel.</p></div>
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="section-label reveal" style="text-align:center">Comment ça marche</div>
+      <div class="section-title reveal" style="text-align:center">3 étapes. C'est tout.</div>
+      <div class="section-sub reveal" style="text-align:center;margin:0 auto 32px">De zéro à votre premier partenariat commercial en moins d'une semaine.</div>
+
+      <!-- Toggle Entreprise / Agent -->
+      <div class="reveal" style="display:inline-flex;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:5px;gap:4px">
+        <button id="hiw-btn-co" onclick="switchHIW('co')" style="padding:10px 24px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:14px;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;transition:all .2s">🏢 Je suis une entreprise</button>
+        <button id="hiw-btn-ag" onclick="switchHIW('ag')" style="padding:10px 24px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:14px;background:transparent;color:var(--text2);transition:all .2s">👤 Je suis un agent</button>
+      </div>
+    </div>
+
+    <!-- VUE ENTREPRISE -->
+    <div id="hiw-co">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:0;max-width:1000px;margin:0 auto 48px">
+
+        <!-- Étape 1 -->
+        <div class="reveal hiw-card" style="background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.borderColor='var(--blue2)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div style="width:64px;height:64px;background:linear-gradient(135deg,rgba(37,99,235,0.15),rgba(37,99,235,0.05));border:2px solid rgba(59,130,246,0.3);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">📋</div>
+          <div style="font-size:11px;font-weight:800;color:var(--blue3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 1</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">Publiez votre mission</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Décrivez votre besoin en 2 minutes. L'IA génère automatiquement une fiche mission optimisée pour attirer les meilleurs agents.</p>
+          <div style="background:rgba(37,99,235,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--blue3)">2 min</div>
+            <div style="font-size:11px;color:var(--text3)">temps moyen de création</div>
+          </div>
+        </div>
+
+        <!-- Flèche -->
+        <div style="text-align:center;padding:0 16px;color:var(--blue3);font-size:24px;opacity:0.5">→</div>
+
+        <!-- Étape 2 -->
+        <div class="reveal hiw-card" style="background:linear-gradient(135deg,rgba(37,99,235,0.08),var(--card));border:2px solid rgba(59,130,246,0.3);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-size:11px;font-weight:800;padding:3px 14px;border-radius:10px;white-space:nowrap">⭐ L'IA travaille pour vous</div>
+          <div style="width:64px;height:64px;background:linear-gradient(135deg,rgba(37,99,235,0.2),rgba(124,58,237,0.1));border:2px solid rgba(59,130,246,0.4);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">🤖</div>
+          <div style="font-size:11px;font-weight:800;color:var(--blue3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 2</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">L'IA matche les meilleurs agents</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Notre algorithme analyse <b style="color:var(--text)">57 412 profils</b> sur 47 critères en temps réel. Score de compatibilité, CA prédit, disponibilité vérifiée.</p>
+          <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--blue3)">~2 sec</div>
+            <div style="font-size:11px;color:var(--text3)">pour analyser 57 000 profils</div>
+          </div>
+        </div>
+
+        <!-- Flèche -->
+        <div style="text-align:center;padding:0 16px;color:var(--blue3);font-size:24px;opacity:0.5">→</div>
+
+        <!-- Étape 3 -->
+        <div class="reveal hiw-card" style="background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.borderColor='var(--green)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div style="width:64px;height:64px;background:rgba(16,185,129,0.08);border:2px solid rgba(16,185,129,0.25);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">🤝</div>
+          <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 3</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">Signez & démarrez</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Contactez directement les agents matchés, échangez via la messagerie intégrée, et démarrez la collaboration. Votre agent génère du CA dès la première semaine.</p>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--green)">4,2 jours</div>
+            <div style="font-size:11px;color:var(--text3)">délai moyen de recrutement</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proof bar -->
+      <div class="reveal" style="display:flex;gap:0;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:700px;margin:0 auto 36px">
+        <div style="flex:1;padding:20px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:900;color:var(--blue3)">× 7,4</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">ROI moyen constaté</div>
+        </div>
+        <div style="flex:1;padding:20px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:900;color:var(--green)">-68%</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">de temps vs recrutement classique</div>
+        </div>
+        <div style="flex:1;padding:20px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:var(--gold)">91%</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">de taux de satisfaction</div>
+        </div>
+      </div>
+
+      <div class="reveal" style="text-align:center">
+        <button class="btn btn-primary btn-lg glow-btn" onclick="openDemo('entreprise')" style="padding:16px 36px;font-size:16px">
+          🤖 Tester le matching IA — Gratuit →
+        </button>
+        <div style="font-size:12px;color:var(--text3);margin-top:10px">Sans inscription · Résultats en 30 secondes</div>
+      </div>
+    </div>
+
+    <!-- VUE AGENT -->
+    <div id="hiw-ag" class="hidden">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:0;max-width:1000px;margin:0 auto 48px">
+
+        <!-- Étape 1 -->
+        <div class="hiw-card" style="background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.borderColor='var(--green)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div style="width:64px;height:64px;background:rgba(16,185,129,0.08);border:2px solid rgba(16,185,129,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">👤</div>
+          <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 1</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">Créez votre profil</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Renseignez votre spécialité, votre zone, vos secteurs. L'IA construit votre score de profil et le rend visible aux entreprises qui correspondent.</p>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--green)">100% gratuit</div>
+            <div style="font-size:11px;color:var(--text3)">sans carte bancaire</div>
+          </div>
+        </div>
+
+        <!-- Flèche -->
+        <div style="text-align:center;padding:0 16px;color:var(--green);font-size:24px;opacity:0.5">→</div>
+
+        <!-- Étape 2 -->
+        <div class="hiw-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.06),var(--card));border:2px solid rgba(16,185,129,0.3);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--green),#059669);color:white;font-size:11px;font-weight:800;padding:3px 14px;border-radius:10px;white-space:nowrap">⭐ L'IA travaille pour vous</div>
+          <div style="width:64px;height:64px;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.08));border:2px solid rgba(16,185,129,0.3);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">🎯</div>
+          <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 2</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">L'IA vous trouve des missions</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Notre IA scanne en permanence les missions publiées et vous envoie uniquement celles où votre score de compatibilité dépasse 85%.</p>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--green)">2 847</div>
+            <div style="font-size:11px;color:var(--text3)">missions actives en ce moment</div>
+          </div>
+        </div>
+
+        <!-- Flèche -->
+        <div style="text-align:center;padding:0 16px;color:var(--green);font-size:24px;opacity:0.5">→</div>
+
+        <!-- Étape 3 -->
+        <div class="hiw-card" style="background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;position:relative;transition:all .3s" onmouseenter="this.style.borderColor='var(--gold)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div style="width:64px;height:64px;background:rgba(245,158,11,0.08);border:2px solid rgba(245,158,11,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">💰</div>
+          <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Étape 3</div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">Touchez vos commissions</h3>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Postulez, échangez avec l'entreprise, et démarrez. Vos commissions sont trackées en temps réel dans votre dashboard. Paiement garanti.</p>
+          <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:10px">
+            <div style="font-size:20px;font-weight:900;color:var(--gold)">3 200€</div>
+            <div style="font-size:11px;color:var(--text3)">commission moyenne / mois</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proof bar agent -->
+      <div style="display:flex;gap:0;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:700px;margin:0 auto 36px">
+        <div style="flex:1;padding:20px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:900;color:var(--green)">0€</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">Inscription 100% gratuite</div>
+        </div>
+        <div style="flex:1;padding:20px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:900;color:var(--gold)">15%</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">commission moyenne proposée</div>
+        </div>
+        <div style="flex:1;padding:20px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:var(--blue3)">30 000+</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">entreprises partenaires</div>
+        </div>
+      </div>
+
+      <div style="text-align:center">
+        <button class="btn btn-lg glow-btn" onclick="showModal('signup-agent')" style="background:var(--green);color:white;box-shadow:0 4px 20px rgba(16,185,129,0.3);padding:16px 36px;font-size:16px">
+          👤 Créer mon profil agent — Gratuit →
+        </button>
+        <div style="font-size:12px;color:var(--text3);margin-top:10px">Sans carte bancaire · Accès immédiat · 100% gratuit</div>
+      </div>
     </div>
   </div>
+
+  <script>
+  function switchHIW(mode) {
+    document.getElementById('hiw-co').classList.toggle('hidden', mode !== 'co');
+    document.getElementById('hiw-ag').classList.toggle('hidden', mode !== 'ag');
+    const btnCo = document.getElementById('hiw-btn-co');
+    const btnAg = document.getElementById('hiw-btn-ag');
+    if (mode === 'co') {
+      btnCo.style.background = 'linear-gradient(135deg,var(--blue),var(--purple))';
+      btnCo.style.color = 'white';
+      btnAg.style.background = 'transparent';
+      btnAg.style.color = 'var(--text2)';
+    } else {
+      btnAg.style.background = 'linear-gradient(135deg,var(--green),#059669)';
+      btnAg.style.color = 'white';
+      btnCo.style.background = 'transparent';
+      btnCo.style.color = 'var(--text2)';
+    }
+  }
+  </script>
 
   <!-- FEATURES -->
   <div class="section bg-2" style="position:relative;z-index:1">
