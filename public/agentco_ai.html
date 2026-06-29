@@ -3072,7 +3072,7 @@ function _renderDemoMissions() {
       '<div class="mission-meta"><span>📍 ' + m.region + '</span></div>' +
       '<div class="mission-commission">' + m.remunLabel + '</div>' +
       '<div style="display:flex;gap:8px;margin-top:10px">' +
-      '<button class="btn btn-sm btn-primary" style="flex:1" onclick="showModal(\'login\')">Candidater</button>' +
+      '<button class="btn btn-sm btn-primary" style="flex:1" onclick="tryCandidate(m.company)">Candidater</button>' +
       '<div class="ai-match-badge">🤖 ' + m.match + '% match</div></div></div>';
   }).join('');
 }
@@ -3117,7 +3117,7 @@ function _renderDemoAgents() {
       '<div class="score-bar"><div class="score-fill ' + (a.score>=90?'gold':'') + '" style="width:' + a.score + '%"></div></div>' +
       '<div style="display:flex;justify-content:space-between;margin-top:10px">' +
       '<span style="font-size:12px;color:var(--text3)">' + a.stars + ' - ' + a.missions + ' missions</span>' +
-      '<button class="btn btn-sm btn-primary" onclick="event.stopPropagation();showModal(\'login\')">Contacter</button></div></div>';
+      '<button class="btn btn-sm btn-primary" onclick="event.stopPropagation();tryContact(a.name)">Contacter</button></div></div>';
   }).join('');
 }
 
@@ -3134,7 +3134,7 @@ function tryContact(agentName) {
 }
 
 async function candidaterMission(missionId) {
-  if (!Auth.isLoggedIn()) { showModal('login'); return; }
+  if (!Auth.isLoggedIn()) { showModal('signup-agent'); return; }
   if (Auth.user()?.role !== 'AGENT') { showToast('Seuls les agents peuvent candidater.', 'info'); return; }
   try {
     await apiCall('POST', '/api/agents/me/apply/' + missionId, {}, true);
@@ -3144,7 +3144,7 @@ async function candidaterMission(missionId) {
 
 // ─── CONTACTER UN AGENT ───
 function contactAgent(agentId, name) {
-  if (!Auth.isLoggedIn()) { showModal('login'); return; }
+  if (!Auth.isLoggedIn()) { showPage('pricing'); setActiveByPage('pricing'); return; }
   const user = Auth.user();
   if (user?.role !== 'COMPANY') { showToast('Seules les entreprises peuvent contacter.', 'info'); return; }
   if (!user?.profile?.plan) { requirePlan('contact-direct'); return; }
@@ -3210,7 +3210,7 @@ function _showDemoMatchResults() {
         '<div style="flex:1"><div style="font-size:16px;font-weight:700">' + a.name + '</div>' +
         '<div style="font-size:13px;color:var(--text2)">' + a.title + '</div>' +
         '<div style="font-size:13px;color:var(--text3)">📍 ' + a.region + ' · ' + a.ca + '</div></div>' +
-        '<button class="btn btn-primary btn-sm" onclick="showModal(\'login\')">Contacter</button></div>' +
+        '<button class="btn btn-primary btn-sm" onclick="tryContact(a.name)">Contacter</button></div>' +
         '<div class="match-breakdown">' +
         '<div class="breakdown-item"><div class="breakdown-label">Secteur</div><div class="breakdown-val text-green">' + Math.round(a.score*0.98) + '%</div></div>' +
         '<div class="breakdown-item"><div class="breakdown-label">Region</div><div class="breakdown-val text-blue">' + Math.round(a.score*0.95) + '%</div></div>' +
@@ -3261,7 +3261,7 @@ function initDash() {
       rl.innerHTML = MISSIONS.sort(function(a,b){return b.match-a.match;}).map(function(m){
         return '<div class="mission-card featured"><div style="display:flex;justify-content:space-between"><div><div class="mission-title">' + m.emoji + ' ' + m.title + '</div><div style="font-size:13px;color:var(--text2);margin-top:2px">' + m.company + '</div></div><div class="ai-match-badge" style="height:fit-content">🤖 ' + m.match + '%</div></div>' +
           '<div class="mission-commission" style="margin-top:8px">' + m.remunLabel + '</div>' +
-          '<button class="btn btn-sm btn-primary" style="margin-top:8px" onclick="showModal(\'login\')">Candidater</button></div>';
+          '<button class="btn btn-sm btn-primary" style="margin-top:8px" onclick="tryCandidate(m.company)">Candidater</button></div>';
       }).join('');
     }
   }
