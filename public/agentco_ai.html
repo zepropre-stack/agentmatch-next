@@ -1466,7 +1466,7 @@ function renderMissions(filter = 'all') {
   const list = document.getElementById('missions-list');
   const filtered = filter === 'all' ? MISSIONS : MISSIONS.filter(m => m.sector === filter);
   list.innerHTML = filtered.map(m => `
-    <div class="mission-card ${m.featured ? 'featured' : ''}" onclick="showToast('📋 Candidature envoyée à ${m.company} !','success')">
+    <div class="mission-card ${m.featured ? 'featured' : ''}" onclick="event.stopPropagation()">
       ${m.featured ? '<div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:10px">⭐ MISSION EN VEDETTE</div>' : ''}
       <div class="mission-company">
         <div class="company-logo" style="background:${m.featured ? 'rgba(245,158,11,0.15)' : 'rgba(37,99,235,0.1)'};">${m.emoji}</div>
@@ -1490,7 +1490,7 @@ function renderMissions(filter = 'all') {
       </div>
       <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px">${m.desc}</p>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" onclick="event.stopPropagation();showToast('✅ Candidature envoyée !','success')">Candidater</button>
+        <button class="btn btn-primary" onclick="event.stopPropagation();tryCandidate()">Candidater</button>
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">En savoir plus</button>
       </div>
     </div>
@@ -1543,7 +1543,7 @@ function renderAgents() {
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:12px">
         <span style="font-size:12px;color:var(--text3)">⭐ ${a.stars} · ${a.missions} missions</span>
-        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();showToast('💬 Message envoyé à ${a.name}','info')">Contacter</button>
+        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();tryContact('${a.name}')">Contacter</button>
       </div>
     </div>
   `).join('');
@@ -1589,7 +1589,7 @@ function showAgentDetail(id) {
       <div><span style="color:var(--text3)">Style :</span> <b>${a.style}</b></div>
     </div>
     <div style="display:flex;gap:10px">
-      <button class="btn btn-primary" style="flex:1;padding:12px" onclick="closeModal('agent-detail');showToast('💬 Message envoyé à ${a.name} !','success')">💬 Contacter</button>
+      <button class="btn btn-primary" style="flex:1;padding:12px" onclick="closeModal('agent-detail');tryContact('${a.name}')">💬 Contacter</button>
       <button class="btn btn-gold" style="flex:1;padding:12px" onclick="closeModal('agent-detail');showToast('📋 Proposition de mission envoyée !','success')">Proposer une mission</button>
     </div>
   `;
@@ -1642,7 +1642,7 @@ function runMatching() {
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
-              <button class="btn btn-primary btn-sm" onclick="showToast('💬 Mise en relation initiée avec ${a.name} !','success')">Contacter</button>
+              <button class="btn btn-primary btn-sm" onclick="tryContact('${a.name}')">Contacter</button>
               <button class="btn btn-ghost btn-sm" onclick="showAgentDetail(${a.id})">Voir profil</button>
             </div>
           </div>
@@ -1691,7 +1691,7 @@ function runMatchingAgent() {
               <div style="font-size:13px;color:var(--text2)">${m.company} · ${m.region}</div>
               <div style="font-size:16px;font-weight:800;color:var(--green);margin-top:4px">${m.remunLabel}</div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="showToast('✅ Candidature envoyée à ${m.company} !','success')">Candidater</button>
+            <button class="btn btn-primary btn-sm" onclick="tryCandidate('${m.company}')">Candidater</button>
           </div>
         </div>
       `).join('')}
@@ -1722,7 +1722,7 @@ function initDash() {
           <div class="ai-match-badge" style="height:fit-content">🤖 ${m.match}%</div>
         </div>
         <div class="mission-commission" style="margin-top:8px">${m.remunLabel}</div>
-        <button class="btn btn-sm btn-primary" style="margin-top:8px" onclick="showToast('✅ Candidature envoyée !','success')">Candidater</button>
+        <button class="btn btn-sm btn-primary" style="margin-top:8px" onclick="tryCandidate()">Candidater</button>
       </div>
     `).join('');
 
@@ -3122,6 +3122,17 @@ function _renderDemoAgents() {
 }
 
 // ─── CANDIDATER ───
+// ─── AUTH GUARDS pour boutons publics ───
+function tryCandidate(missionName) {
+  if (!Auth.isLoggedIn()) { showModal('signup-agent'); return; }
+  showToast('✅ Candidature envoyée pour ' + (missionName||'cette mission') + ' !', 'success');
+}
+function tryContact(agentName) {
+  if (!Auth.isLoggedIn()) { showPage('pricing'); setActiveByPage('pricing'); return; }
+  if (Auth.user()?.role !== 'COMPANY') { showToast('Seules les entreprises peuvent contacter un agent.', 'info'); return; }
+  showToast('💬 Mise en relation initiée avec ' + (agentName||'l'agent') + ' !', 'success');
+}
+
 async function candidaterMission(missionId) {
   if (!Auth.isLoggedIn()) { showModal('login'); return; }
   if (Auth.user()?.role !== 'AGENT') { showToast('Seuls les agents peuvent candidater.', 'info'); return; }
