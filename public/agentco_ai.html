@@ -75,7 +75,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 .page.active { display: block; }
 
 /* ─── HOME PAGE ─── */
-.hero { position: relative; padding: 100px 64px 80px; text-align: center; }
+.hero { position: relative; padding: 100px 64px 80px; text-align: center; overflow: hidden; }
 .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 50% -10%, rgba(37,99,235,0.35), transparent 70%), radial-gradient(ellipse 60% 50% at 85% 90%, rgba(124,58,237,0.25), transparent 65%), radial-gradient(ellipse 40% 40% at 10% 80%, rgba(16,185,129,0.1), transparent 60%); pointer-events: none; z-index:0; }
 .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(37,99,235,0.15); border: 1px solid rgba(59,130,246,0.3); border-radius: 99px; padding: 6px 16px; font-size: 13px; font-weight: 600; color: var(--blue3); margin-bottom: 24px; }
 .hero h1 { font-size: 58px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
@@ -319,29 +319,89 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 .lock-icon { font-size: 32px; }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
-  .pricing-grid { grid-template-columns: 1fr; }
+/* ─── TABLET (768–1024px) ─── */
+@media (max-width: 1024px) {
+  .hero { padding: 80px 40px 60px; overflow: hidden; }
+  .hero h1 { font-size: 44px; }
+  .container { padding: 0 24px; }
+  .nav { padding: 0 24px; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .agents-grid { grid-template-columns: repeat(2, 1fr); }
+  .missions-list { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
   .plan-card.popular { transform: none; }
+  .ai-proc-grid { grid-template-columns: 1fr; }
+  .ai-proc-brain { display: none; }
+  /* Fix floating orbs overflow on tablet */
+  .hero > div[style*="position:absolute"] { display: none; }
 }
+
+/* ─── MOBILE (< 768px) ─── */
 @media (max-width: 768px) {
-  .hero { padding: 60px 24px 40px; }
-  .hero h1 { font-size: 32px; }
-  .section { padding: 48px 24px; }
-  .features-grid, .form-row, .grid-2, .grid-3, .grid-4, .kpi-grid, .dash-layout { grid-template-columns: 1fr; }
-  .dash-sidebar { display: none; }
+  /* Base */
+  html, body { overflow-x: hidden; }
+  .hero { padding: 70px 20px 40px; overflow: hidden; }
+  .hero h1 { font-size: 28px; line-height: 1.2; }
+  .hero p { font-size: 15px; }
+  .section { padding: 40px 16px; }
+  .container { padding: 0 16px; }
+
+  /* Nav */
+  .nav { padding: 0 16px; gap: 8px; }
   .nav-links { display: none; }
   .nav-ctas .btn-sm { display: none; }
-  .nav-ctas .btn-sm:last-child { display: inline-flex; }
-  .hero-stats { gap: 16px; }
-  .profile-layout { flex-direction: column; }
-  .match-breakdown { grid-template-columns: repeat(2,1fr); }
-  .hero-ctas { flex-direction: column; align-items: center; }
-  .free-banner { flex-direction: column; text-align: center; }
-  .annual-toggle { flex-wrap: wrap; justify-content: center; }
-  #page-missions > div, #page-agents > div { padding: 24px 16px; }
-  .match-container { padding: 24px 16px; }
-  .dash-content { padding: 20px 16px; }
+  .nav-ctas .btn-sm:last-child { display: inline-flex; font-size: 11px; padding: 6px 10px; }
+  .nav-logo span { display: none; }
+
+  /* Grids → 1 col */
+  .features-grid, .form-row, .grid-2, .grid-3, .grid-4,
+  .dash-layout, .pricing-grid, .agents-grid, .missions-list { grid-template-columns: 1fr; }
   .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .match-breakdown { grid-template-columns: repeat(2, 1fr); }
+
+  /* Hero */
+  .hero-ctas { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-ctas .btn { width: 100%; justify-content: center; }
+  .hero-stats { gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .hero-badge { font-size: 11px; padding: 6px 12px; }
+  /* Hide orbs entirely on mobile */
+  .hero > div[style*="position:absolute"] { display: none !important; }
+
+  /* Sections */
+  .free-banner { flex-direction: column; text-align: center; gap: 12px; }
+  .annual-toggle { flex-wrap: wrap; justify-content: center; }
+  .plan-card.popular { transform: none; }
+  .profile-layout { flex-direction: column; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+
+  /* Pages */
+  #page-missions > div, #page-agents > div { padding: 20px 12px; }
+  .match-container { padding: 20px 12px; }
+  .dash-content { padding: 16px 12px; }
+  .dash-sidebar { display: none; }
+  .modal { padding: 20px 16px; }
+  .modal h2 { font-size: 18px; }
+
+  /* AI sections */
+  .ai-proc-grid { grid-template-columns: 1fr; }
+  .ai-proc-brain { display: none; }
+  .live-ticker { display: none; }
+  .demo-modal-inner { width: 95vw !important; padding: 20px 16px !important; }
+
+  /* Tables */
+  .pricing-table { font-size: 12px; }
+  .pricing-table th, .pricing-table td { padding: 8px 6px; }
+}
+
+/* ─── SMALL MOBILE (< 480px) ─── */
+@media (max-width: 480px) {
+  .hero h1 { font-size: 24px; }
+  .hero-stats { flex-direction: column; gap: 8px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .agent-card, .mission-card { padding: 14px; }
+  .match-result { padding: 14px; }
+  .nav-ctas { gap: 4px; }
 }
 
 /* ─── FUTURISTIC HOME ANIMATIONS ─── */
