@@ -1372,6 +1372,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
     <button id="login-btn" class="btn btn-primary w-full" style="padding:14px;border-radius:10px;margin-top:8px" onclick="submitLogin()">Se connecter</button>
     <div style="text-align:center;margin-top:8px;font-size:12px"><a href="#" style="color:var(--text3)" onclick="submitForgotPassword()">Mot de passe oublié ?</a></div>
     <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text3)">Pas de compte ? <a href="#" style="color:var(--blue3)" onclick="closeModal('login');showPage('pricing');setActiveByPage('pricing')">Voir les offres</a> · <a href="#" style="color:var(--green2)" onclick="closeModal('login');showModal('signup-agent')">Je suis agent (gratuit)</a></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07)">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-align:center;letter-spacing:0.5px">— ACCÈS DÉMO INSTANTANÉ —</div>
+      <div style="display:flex;gap:8px">
+        <button onclick="closeModal('login');demoLogin('COMPANY')" style="flex:1;padding:9px 6px;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.3);color:var(--blue3);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600">🏢 Demo Entreprise</button>
+        <button onclick="closeModal('login');demoLogin('AGENT')" style="flex:1;padding:9px 6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:var(--green2);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600">👤 Demo Agent</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3123,6 +3130,35 @@ function _renderDemoAgents() {
 }
 
 // ─── CANDIDATER ───
+// ─── DEMO LOGIN ───
+function demoLogin(role) {
+  if (role === 'COMPANY') {
+    Auth.save('demo-token-company-2024', {
+      id: 'demo-company-1',
+      role: 'COMPANY',
+      email: 'demo.entreprise@agentmatch.ai',
+      firstName: 'Jean',
+      lastName: 'Dupont',
+      company: 'Demo SaaS France',
+      profile: { plan: 'pro', company: 'Demo SaaS France' }
+    });
+    showToast('✅ Connecté en démo — Entreprise (Plan Pro)', 'success');
+  } else {
+    Auth.save('demo-token-agent-2024', {
+      id: 'demo-agent-1',
+      role: 'AGENT',
+      email: 'demo.agent@agentmatch.ai',
+      firstName: 'Sophie',
+      lastName: 'Martin',
+      profile: { score: 96, sectors: ['Tech & SaaS'], region: 'Île-de-France' }
+    });
+    showToast('✅ Connecté en démo — Agent commercial', 'success');
+  }
+  updateNavForUser(Auth.user());
+  showPage('dashboard');
+  setActiveByPage('dashboard');
+}
+
 // ─── AUTH GUARDS pour boutons publics ───
 function tryCandidate(missionName) {
   if (!Auth.isLoggedIn()) { showModal('signup-agent'); return; }
