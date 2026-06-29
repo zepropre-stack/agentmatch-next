@@ -1254,7 +1254,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         <div style="width:44px;height:44px;background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">N</div>
         <div>
           <div style="font-weight:700;font-size:14px">Nextera Solutions</div>
-          <div style="font-size:12px;color:var(--text3)">Plan Pro IA · <span style="color:var(--green)">Actif</span></div>
+          <div style="font-size:12px;color:var(--text3)">Plan <span id="co-plan-label" style="color:var(--gold);font-weight:700">Business 👑</span> · <span style="color:var(--green)">Actif</span></div>
         </div>
       </div>
       <div class="sidebar-section">
@@ -1264,6 +1264,11 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         <button class="sidebar-link" onclick="showCompanyDash('co-candidats',this)">👥 Candidats <span class="badge" style="background:var(--gold)">12</span></button>
         <button class="sidebar-link" onclick="showCompanyDash('co-matching',this)">✨ Matching IA <span class="badge">3</span></button>
       </div>
+      <div class="sidebar-section" id="co-sidebar-ai">
+        <div class="sidebar-label">IA & Analytics</div>
+        <button class="sidebar-link" onclick="showCompanyDash('co-search',this)">🔍 Recherche IA</button>
+        <button class="sidebar-link" onclick="showCompanyDash('co-analytics',this)">📈 Analytics avancés</button>
+      </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Gestion</div>
         <button class="sidebar-link" onclick="showCompanyDash('co-agents',this)">🤝 Mes agents actifs</button>
@@ -1271,11 +1276,10 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Usage IA</div>
-        <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px">
+        <div id="co-usage-widget" style="background:rgba(37,99,235,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px">
           <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:6px">🤖 MATCHINGS CE MOIS</div>
-          <div style="font-size:28px;font-weight:900;color:var(--blue3)">47</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px">/ 100 inclus · Plan Pro</div>
-          <div class="score-bar" style="margin-top:8px"><div class="score-fill" style="width:47%"></div></div>
+          <div style="font-size:28px;font-weight:900;color:var(--gold)">∞</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Illimité · Plan Business</div>
         </div>
       </div>
     </div>
@@ -1603,25 +1607,315 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         </div>
       </div>
 
+      <!-- RECHERCHE IA -->
+      <div id="co-search" class="hidden">
+        <div class="dash-title">🔍 Recherche IA</div>
+        <div class="dash-sub" id="co-search-sub">Lancez une recherche intelligente parmi 57 412 agents — résultats en temps réel</div>
+
+        <!-- STEP 1: Formulaire de recherche -->
+        <div id="co-search-step1">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+              <div class="form-group">
+                <label class="form-label">Secteur cible</label>
+                <select id="co-search-sector" class="form-select">
+                  <option value="tech">Tech & SaaS</option>
+                  <option value="immo">Immobilier</option>
+                  <option value="finance">Finance & Assurance</option>
+                  <option value="industrie">Industrie</option>
+                  <option value="sante">Santé</option>
+                  <option value="retail">Retail & E-commerce</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type de mission</label>
+                <select id="co-search-type" class="form-select">
+                  <option value="bdr">BDR / Prospection</option>
+                  <option value="closing">Closing / Account Executive</option>
+                  <option value="full">Full cycle (Prospection + Closing)</option>
+                  <option value="grands">Grands comptes</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Commission proposée</label>
+                <select id="co-search-commission" class="form-select">
+                  <option value="10">10%</option>
+                  <option value="15" selected>15%</option>
+                  <option value="17">17%</option>
+                  <option value="20">20%</option>
+                  <option value="25">+20%</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Zone géographique</label>
+                <select id="co-search-zone" class="form-select">
+                  <option value="idf">Île-de-France</option>
+                  <option value="remote">Full remote</option>
+                  <option value="paca">PACA</option>
+                  <option value="national">National (toute France)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px">
+              <label class="form-label">Niveau d'expérience requis</label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+                <button class="demo-type-btn active" onclick="selectDemoType(this)" style="border-radius:10px;padding:8px 16px;font-size:13px">Débutant (0-2 ans)</button>
+                <button class="demo-type-btn" onclick="selectDemoType(this)" style="border-radius:10px;padding:8px 16px;font-size:13px">Confirmé (3-5 ans)</button>
+                <button class="demo-type-btn active" onclick="selectDemoType(this)" style="border-radius:10px;padding:8px 16px;font-size:13px">Expert (6-10 ans)</button>
+                <button class="demo-type-btn" onclick="selectDemoType(this)" style="border-radius:10px;padding:8px 16px;font-size:13px">Senior (+10 ans)</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="btn btn-primary" style="padding:14px 28px;font-size:15px;flex:1" onclick="runCompanySearch()">
+                🤖 Lancer la recherche IA →
+              </button>
+              <div style="font-size:12px;color:var(--text3);text-align:center">
+                <div style="color:var(--gold);font-weight:700">∞</div>
+                <div>Illimité</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recherches récentes -->
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:14px">Recherches récentes</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;cursor:pointer" onclick="document.getElementById('co-search-sector').value='tech';runCompanySearch()">
+                <div>
+                  <span style="font-size:13px;font-weight:600">BDR SaaS · Île-de-France · 17%</span>
+                  <span style="font-size:11px;color:var(--text3);margin-left:8px">il y a 2h</span>
+                </div>
+                <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;padding:2px 8px;border-radius:8px">12 matchs</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;cursor:pointer" onclick="document.getElementById('co-search-sector').value='finance';runCompanySearch()">
+                <div>
+                  <span style="font-size:13px;font-weight:600">Closing Finance · Remote · 20%</span>
+                  <span style="font-size:11px;color:var(--text3);margin-left:8px">hier</span>
+                </div>
+                <span style="background:rgba(37,99,235,0.1);color:var(--blue3);font-size:11px;padding:2px 8px;border-radius:8px">8 matchs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Animation scan IA -->
+        <div id="co-search-step2" class="hidden" style="text-align:center;padding:20px 0">
+          <canvas id="co-brain" width="120" height="120" style="margin:0 auto 20px;display:block"></canvas>
+          <div id="co-ai-title" style="font-size:18px;font-weight:700;margin-bottom:6px">Analyse en cours…</div>
+          <div id="co-ai-sub" style="font-size:13px;color:var(--text3);margin-bottom:20px">Initialisation du moteur IA</div>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;height:8px;margin-bottom:8px;overflow:hidden">
+            <div id="co-ai-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple2));border-radius:12px;transition:width .3s"></div>
+          </div>
+          <div id="co-ai-pct" style="font-size:13px;color:var(--blue3);font-weight:700;margin-bottom:20px">0%</div>
+          <div id="co-log" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;font-family:monospace;font-size:12px;color:var(--green2);max-height:180px;overflow-y:auto;line-height:1.8"></div>
+        </div>
+
+        <!-- STEP 3: Résultats -->
+        <div id="co-search-step3" class="hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+            <div>
+              <div style="font-size:20px;font-weight:800" id="co-results-title">🎯 Profils matchés pour vous</div>
+              <div style="font-size:13px;color:var(--text2);margin-top:4px" id="co-results-sub">Analysés parmi 57 412 agents</div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-ghost btn-sm" onclick="resetCompanySearch()">← Nouvelle recherche</button>
+              <button class="btn btn-primary btn-sm" id="co-export-btn">⬇ Exporter CSV</button>
+            </div>
+          </div>
+
+          <!-- Filtres résultats -->
+          <div class="filter-bar" style="margin-bottom:16px">
+            <button class="filter-btn active">Tous</button>
+            <button class="filter-btn">Score &gt;90%</button>
+            <button class="filter-btn">Disponibles</button>
+            <button class="filter-btn">Remote OK</button>
+          </div>
+
+          <div id="co-search-results" style="display:flex;flex-direction:column;gap:14px"></div>
+
+          <div id="co-search-unlock" style="background:linear-gradient(135deg,rgba(245,158,11,0.06),var(--card));border:1px dashed var(--gold);border-radius:14px;padding:20px;text-align:center;margin-top:16px;display:none">
+            <div style="font-size:18px;font-weight:800;margin-bottom:6px">🔒 <span id="co-unlock-count">42</span> autres profils disponibles</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Passez au plan Business pour voir tous les résultats et contacter sans limite</div>
+            <button class="btn btn-gold" onclick="showPage('pricing');setActiveByPage('pricing')">👑 Passer au Business · 219€/mois →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS AVANCÉS -->
+      <div id="co-analytics" class="hidden">
+        <div class="dash-title">📈 Analytics avancés</div>
+        <div class="dash-sub">Performance de vos campagnes de recrutement · Données en temps réel</div>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">CA généré via agents</div>
+            <div class="kpi-value text-green">284K€</div>
+            <div class="kpi-change up">▲ +31% vs T1</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">ROI moyen</div>
+            <div class="kpi-value" style="color:var(--gold)">× 7,4</div>
+            <div class="kpi-change up">▲ Top 5% clients</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Taux de succès agent</div>
+            <div class="kpi-value" style="color:var(--purple2)">68%</div>
+            <div class="kpi-change up">▲ Moy. 42%</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Délai moyen recrutement</div>
+            <div class="kpi-value text-blue">4,2j</div>
+            <div class="kpi-change up">▲ -38% grâce IA</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:20px">
+          <!-- CA par agent -->
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:16px">CA par agent ce trimestre</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="progress-row">
+                <span class="progress-label" style="font-size:12px;width:70px">Thomas M.</span>
+                <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:100%;background:var(--gold)"></div></div>
+                <span style="color:var(--gold);font-weight:700;font-size:13px;min-width:60px;text-align:right">42 500€</span>
+              </div>
+              <div class="progress-row">
+                <span class="progress-label" style="font-size:12px;width:70px">Alice L.</span>
+                <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:66%;background:var(--blue2)"></div></div>
+                <span style="color:var(--blue3);font-weight:700;font-size:13px;min-width:60px;text-align:right">28 000€</span>
+              </div>
+              <div class="progress-row">
+                <span class="progress-label" style="font-size:12px;width:70px">Marc D.</span>
+                <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:50%;background:var(--green)"></div></div>
+                <span style="color:var(--green);font-weight:700;font-size:13px;min-width:60px;text-align:right">21 200€</span>
+              </div>
+              <div class="progress-row">
+                <span class="progress-label" style="font-size:12px;width:70px">Sophie C.</span>
+                <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:35%;background:var(--purple2)"></div></div>
+                <span style="color:var(--purple2);font-weight:700;font-size:13px;min-width:60px;text-align:right">14 800€</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prédiction IA CA futur -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.05),var(--card));border-color:rgba(245,158,11,0.2)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+              <span style="font-size:18px">🤖</span>
+              <span style="font-weight:700;color:var(--gold)">Prédiction IA · T3 2026</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px">
+                <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px">CA PRÉVU JUILLET</div>
+                <div style="font-size:26px;font-weight:900;color:var(--gold)">+98K€</div>
+                <div style="font-size:12px;color:var(--text2)">Avec 7 agents actifs · Confiance 87%</div>
+              </div>
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px">
+                <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px">RECOMMANDATION</div>
+                <div style="font-size:13px;color:var(--text2);line-height:1.6">Recruter <b style="color:var(--text)">2 agents supplémentaires</b> en Finance pourrait générer +<b style="color:var(--green)">47K€</b> de CA additionnel d'ici 90 jours.</div>
+                <button class="btn btn-sm btn-gold" style="margin-top:8px" onclick="showCompanyDash('co-search',document.querySelectorAll('.sidebar-link')[7])">Lancer la recherche IA →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversion funnel -->
+        <div class="card">
+          <div style="font-weight:700;margin-bottom:16px">Funnel de conversion · Ce trimestre</div>
+          <div style="display:flex;align-items:flex-end;gap:12px;height:140px;margin-bottom:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:6px">
+              <div style="font-weight:800;color:var(--blue3);font-size:18px">47</div>
+              <div style="background:var(--blue);border-radius:8px 8px 0 0;width:100%;height:140px"></div>
+              <div style="font-size:11px;color:var(--text3);text-align:center">Matchs IA</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:6px">
+              <div style="font-weight:800;color:var(--purple2);font-size:18px">28</div>
+              <div style="background:var(--purple2);border-radius:8px 8px 0 0;width:100%;height:84px"></div>
+              <div style="font-size:11px;color:var(--text3);text-align:center">Contactés</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:6px">
+              <div style="font-weight:800;color:var(--gold);font-size:18px">12</div>
+              <div style="background:var(--gold);border-radius:8px 8px 0 0;width:100%;height:36px"></div>
+              <div style="font-size:11px;color:var(--text3);text-align:center">Entretiens</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:6px">
+              <div style="font-weight:800;color:var(--green);font-size:18px">7</div>
+              <div style="background:var(--green);border-radius:8px 8px 0 0;width:100%;height:21px"></div>
+              <div style="font-size:11px;color:var(--text3);text-align:center">Signés</div>
+            </div>
+          </div>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px;font-size:13px;color:var(--text2);text-align:center">
+            Taux de conversion final : <b style="color:var(--green)">14,9%</b> · Benchmark plateforme : 8,3% · <b style="color:var(--green)">+79% au-dessus</b>
+          </div>
+        </div>
+      </div>
+
       <!-- FACTURATION -->
       <div id="co-factu" class="hidden">
         <div class="dash-title">Facturation</div>
-        <div class="dash-sub">Plan Pro IA · 149€/mois · Renouvellement le 1er juillet</div>
+        <div id="co-factu-sub" class="dash-sub">Plan Business · 219€/mois · Renouvellement le 1er juillet</div>
+
+        <!-- Plans comparatifs -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+          <!-- Starter -->
+          <div id="co-plan-starter" style="background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;opacity:0.6">
+            <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:8px">STARTER</div>
+            <div style="font-size:28px;font-weight:900;margin-bottom:4px">89<span style="font-size:14px;font-weight:400;color:var(--text2)">€/mois</span></div>
+            <ul style="list-style:none;font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:5px;margin-top:12px">
+              <li>✓ 3 annonces actives</li>
+              <li>✓ Candidatures illimitées</li>
+              <li>✓ Contact agents candidats</li>
+              <li style="color:var(--text3)">✗ Matching IA</li>
+              <li style="color:var(--text3)">✗ Analytics avancés</li>
+            </ul>
+          </div>
+          <!-- Pro -->
+          <div id="co-plan-pro" style="background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;opacity:0.6">
+            <div style="font-size:11px;color:white;font-weight:700;margin-bottom:8px">PRO IA</div>
+            <div style="font-size:28px;font-weight:900;margin-bottom:4px">149<span style="font-size:14px;font-weight:400;color:var(--text2)">€/mois</span></div>
+            <ul style="list-style:none;font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:5px;margin-top:12px">
+              <li>✓ 5 annonces actives</li>
+              <li>✓ Matching IA proactif</li>
+              <li>✓ 15 contacts/mois</li>
+              <li>✓ Score 47 critères</li>
+              <li style="color:var(--text3)">✗ Contacts illimités</li>
+            </ul>
+          </div>
+          <!-- Business — actif -->
+          <div id="co-plan-business" style="background:linear-gradient(135deg,rgba(245,158,11,0.08),var(--card));border:2px solid var(--gold);border-radius:16px;padding:20px;position:relative">
+            <span style="position:absolute;top:-10px;right:12px;background:var(--gold);color:#000;font-size:10px;font-weight:800;padding:2px 10px;border-radius:10px">ACTIF</span>
+            <div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:8px">👑 BUSINESS</div>
+            <div style="font-size:28px;font-weight:900;margin-bottom:4px;color:var(--gold)">219<span style="font-size:14px;font-weight:400;color:var(--text2)">€/mois</span></div>
+            <ul style="list-style:none;font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:5px;margin-top:12px">
+              <li style="color:var(--green)">✓ Annonces illimitées</li>
+              <li style="color:var(--green)">✓ Matching IA proactif</li>
+              <li style="color:var(--green)">✓ Contacts illimités</li>
+              <li style="color:var(--green)">✓ Analytics avancés</li>
+              <li style="color:var(--green)">✓ Account manager dédié</li>
+              <li style="color:var(--green)">✓ Export données & API</li>
+            </ul>
+          </div>
+        </div>
+
         <div class="grid-2">
           <div class="card">
-            <div style="font-weight:700;margin-bottom:16px">Abonnement actuel</div>
-            <div style="background:linear-gradient(135deg,rgba(37,99,235,0.08),rgba(124,58,237,0.05));border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:16px;margin-bottom:12px">
-              <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:4px">🔵 PRO IA</div>
-              <div style="font-size:32px;font-weight:900">149<span style="font-size:16px;font-weight:400;color:var(--text2)">€/mois</span></div>
-              <div style="font-size:12px;color:var(--text3);margin-top:4px">100 matchings IA · 10 missions · Contacts illimités</div>
-            </div>
-            <button class="btn btn-gold btn-sm" style="width:100%">Passer au Business 219€/mois →</button>
+            <div style="font-weight:700;margin-bottom:16px">Usage ce mois</div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Matchings IA</span><div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--gold)"></div></div><span class="progress-val" style="color:var(--gold)">∞</span></div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Missions actives</span><div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--green)"></div></div><span class="progress-val text-green">4/∞</span></div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Contacts directs</span><div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--blue2)"></div></div><span class="progress-val text-blue">∞</span></div>
           </div>
           <div class="card">
-            <div style="font-weight:700;margin-bottom:16px">Usage ce mois</div>
-            <div class="progress-row"><span class="progress-label" style="font-size:12px">Matchings IA</span><div class="progress-track"><div class="progress-fill" style="width:47%;background:var(--blue)"></div></div><span class="progress-val text-blue">47/100</span></div>
-            <div class="progress-row"><span class="progress-label" style="font-size:12px">Missions actives</span><div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--green)"></div></div><span class="progress-val text-green">4/10</span></div>
-            <div class="progress-row"><span class="progress-label" style="font-size:12px">Contacts vus</span><div class="progress-track"><div class="progress-fill" style="width:23%;background:var(--gold)"></div></div><span class="progress-val text-gold">23/∞</span></div>
+            <div style="font-weight:700;margin-bottom:16px">Factures récentes</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text2)">Juin 2026</span><span style="font-weight:700">219€</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text2)">Mai 2026</span><span style="font-weight:700">219€</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
+                <span style="color:var(--text2)">Avril 2026</span><span style="font-weight:700">219€</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -3870,11 +4164,34 @@ function demoLogin(role) {
   }
   updateNavForUser(Auth.user());
   if (role === 'COMPANY') {
+    companyPlan = 'business'; // démo = plan maximum
+    applyCompanyPlan();
     showPage('dashboard-company');
     setActiveByPage('dashboard-company');
   } else {
     showPage('dashboard');
     setActiveByPage('dashboard');
+  }
+}
+
+function applyCompanyPlan() {
+  const planLabel = document.getElementById('co-plan-label');
+  const usageWidget = document.getElementById('co-usage-widget');
+  const aiSidebar = document.getElementById('co-sidebar-ai');
+
+  if (companyPlan === 'business') {
+    if (planLabel) { planLabel.textContent = 'Business 👑'; planLabel.style.color = 'var(--gold)'; }
+    if (usageWidget) usageWidget.innerHTML = '<div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:6px">👑 PLAN BUSINESS</div><div style="font-size:22px;font-weight:900;color:var(--gold)">∞</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Tout illimité · Contacts · IA · Analytics</div>';
+    if (aiSidebar) aiSidebar.style.display = '';
+  } else if (companyPlan === 'pro') {
+    if (planLabel) { planLabel.textContent = 'Pro IA ⭐'; planLabel.style.color = 'var(--blue3)'; }
+    if (usageWidget) usageWidget.innerHTML = '<div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:6px">🤖 MATCHINGS CE MOIS</div><div style="font-size:28px;font-weight:900;color:var(--blue3)">47</div><div style="font-size:11px;color:var(--text3);margin-top:2px">/ 100 inclus · Plan Pro</div><div style="background:var(--bg);border-radius:6px;height:6px;margin-top:8px;overflow:hidden"><div style="height:100%;width:47%;background:var(--blue2);border-radius:6px"></div></div>';
+    if (aiSidebar) aiSidebar.style.display = '';
+  } else {
+    // starter
+    if (planLabel) { planLabel.textContent = 'Starter'; planLabel.style.color = 'var(--blue3)'; }
+    if (usageWidget) usageWidget.innerHTML = '<div style="font-size:11px;color:var(--text3);font-weight:700;margin-bottom:6px">📋 PLAN STARTER</div><div style="font-size:13px;color:var(--text2);margin-top:4px">Marketplace uniquement · <a onclick="showPage(\'pricing\')" style="color:var(--blue3);cursor:pointer">Passer au Pro →</a></div>';
+    if (aiSidebar) aiSidebar.style.display = 'none';
   }
 }
 
@@ -3884,6 +4201,164 @@ function showCompanyDash(id, el) {
   if (target) target.classList.remove('hidden');
   document.querySelectorAll('#page-dashboard-company .sidebar-link').forEach(l => l.classList.remove('active'));
   if (el) el.classList.add('active');
+}
+
+// ─── RECHERCHE IA ENTREPRISE ───
+let companyPlan = 'business'; // starter | pro | business
+let coSearchInterval = null;
+
+function runCompanySearch() {
+  // Transition step1 → step2
+  document.getElementById('co-search-step1').classList.add('hidden');
+  document.getElementById('co-search-step2').classList.remove('hidden');
+  document.getElementById('co-search-step3').classList.add('hidden');
+
+  // Animation cerveau IA (même logique que démo homepage)
+  const bc = document.getElementById('co-brain');
+  if (bc) {
+    const ctx = bc.getContext('2d');
+    const W = 120, H = 120;
+    const layers = [[1],[3],[4],[3],[1]];
+    const nodes = [];
+    layers.forEach((cnt, li) => {
+      for (let i = 0; i < cnt[0]; i++) {
+        nodes.push({ x: (li/(layers.length-1))*(W-20)+10, y: (i/(Math.max(cnt[0]-1,1)))*(H-20)+10 });
+      }
+    });
+    let t = 0;
+    (function drawBrain() {
+      ctx.clearRect(0,0,W,H);
+      let ni = 0;
+      for (let li = 0; li < layers.length-1; li++) {
+        for (let a = 0; a < layers[li][0]; a++) {
+          for (let b = 0; b < layers[li+1][0]; b++) {
+            const nA = nodes[ni + a], nB = nodes[ni + layers[li][0] + b];
+            if (!nA || !nB) continue;
+            const pulse = (Math.sin(t*0.05 + a + b) + 1) / 2;
+            ctx.strokeStyle = `rgba(37,99,235,${0.15 + pulse * 0.4})`;
+            ctx.lineWidth = 0.8 + pulse;
+            ctx.beginPath(); ctx.moveTo(nA.x,nA.y); ctx.lineTo(nB.x,nB.y); ctx.stroke();
+          }
+        }
+        ni += layers[li][0];
+      }
+      nodes.forEach((n,i) => {
+        const pulse = (Math.sin(t*0.08 + i) + 1) / 2;
+        ctx.beginPath(); ctx.arc(n.x, n.y, 4 + pulse*2, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(37,99,235,${0.5 + pulse*0.5})`; ctx.fill();
+        ctx.strokeStyle = `rgba(96,165,250,${0.4+pulse*0.6})`; ctx.lineWidth=1.5; ctx.stroke();
+      });
+      t++;
+      if (!document.getElementById('co-search-step2').classList.contains('hidden')) requestAnimationFrame(drawBrain);
+    })();
+  }
+
+  const logs = [
+    '> Analyse des critères de recherche…',
+    '> Scan de 57 412 profils agents…',
+    '> Calcul des scores de compatibilité (47 critères)…',
+    '> Évaluation des performances historiques…',
+    '> Vérification des disponibilités…',
+    '> Prédiction du CA potentiel agent…',
+    '> Filtrage par zone géographique…',
+    '> Tri par score IA décroissant…',
+    '> Rapport prêt ✓'
+  ];
+  const titles = ['Analyse en cours…','Scoring des profils…','Filtrage IA…','Finalisation…'];
+  const subs = ['Initialisation du moteur IA','Lecture de 57 412 agents','Calcul de compatibilité 47 critères','Sélection des meilleurs profils'];
+
+  const logEl = document.getElementById('co-log');
+  const barEl = document.getElementById('co-ai-bar');
+  const pctEl = document.getElementById('co-ai-pct');
+  const titleEl = document.getElementById('co-ai-title');
+  const subEl = document.getElementById('co-ai-sub');
+  logEl.innerHTML = '';
+  let step = 0;
+  if (coSearchInterval) clearInterval(coSearchInterval);
+  coSearchInterval = setInterval(() => {
+    if (step < logs.length) {
+      const line = document.createElement('div');
+      line.textContent = logs[step];
+      line.style.opacity = '0'; line.style.transition = 'opacity .3s';
+      logEl.appendChild(line);
+      setTimeout(() => line.style.opacity = '1', 30);
+      logEl.scrollTop = logEl.scrollHeight;
+      const pct = Math.round(((step+1) / logs.length) * 100);
+      barEl.style.width = pct + '%';
+      pctEl.textContent = pct + '%';
+      if (titles[Math.floor(step/3)]) titleEl.textContent = titles[Math.floor(step/3)];
+      if (subs[Math.floor(step/3)]) subEl.textContent = subs[Math.floor(step/3)];
+      step++;
+    } else {
+      clearInterval(coSearchInterval);
+      setTimeout(showCompanySearchResults, 500);
+    }
+  }, 300);
+}
+
+function showCompanySearchResults() {
+  document.getElementById('co-search-step2').classList.add('hidden');
+  document.getElementById('co-search-step3').classList.remove('hidden');
+
+  const sector = document.getElementById('co-search-sector')?.value || 'tech';
+  const agents = DEMO_AGENTS[sector] || DEMO_AGENTS.tech;
+  const isUnlimited = companyPlan === 'business';
+  const contactLimit = companyPlan === 'starter' ? 0 : 15;
+
+  document.getElementById('co-results-title').textContent = `🎯 ${agents.length} profils matchés · Score moyen 91%`;
+  document.getElementById('co-results-sub').innerHTML = `Analysés parmi <b style="color:var(--blue3)">57 412</b> agents · Plan ${companyPlan === 'business' ? '👑 Business' : companyPlan === 'pro' ? 'Pro IA' : 'Starter'}`;
+
+  const container = document.getElementById('co-search-results');
+  container.innerHTML = '';
+  agents.forEach((a, i) => {
+    const canContact = isUnlimited || (companyPlan === 'pro' && i < contactLimit);
+    setTimeout(() => {
+      const card = document.createElement('div');
+      card.style.cssText = `background:var(--card);border:1.5px solid ${i===0?'var(--gold)':'var(--border)'};border-radius:16px;padding:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap`;
+      card.innerHTML = `
+        ${i===0 ? '<span style="position:absolute;display:none">TOP</span>' : ''}
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">${a.emoji}</div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-weight:800;font-size:15px">${a.name} <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px">● Disponible</span>${i===0?'<span style="background:rgba(245,158,11,0.1);color:var(--gold);font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px">⭐ Top match</span>':''}</div>
+          <div style="color:var(--text2);font-size:12px;margin:2px 0">${a.title} · ${a.xp} d'expérience</div>
+          <div style="color:var(--blue3);font-size:11px;margin-bottom:6px">${a.specs} · ${a.zone}</div>
+          <div style="background:var(--bg);border-radius:6px;height:6px;overflow:hidden"><div style="height:100%;width:${a.score}%;background:linear-gradient(90deg,var(--blue),var(--purple2));border-radius:6px"></div></div>
+        </div>
+        <div style="text-align:center;flex-shrink:0">
+          <div style="font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--blue3),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${a.score}%</div>
+          <div style="font-size:11px;color:var(--text3);font-weight:600">score IA</div>
+        </div>
+        <div style="flex-shrink:0">
+          ${canContact
+            ? `<button class="btn btn-sm btn-primary" onclick="showToast('✅ Contact envoyé à ${a.name}','success')">Contacter →</button>`
+            : companyPlan === 'starter'
+              ? `<button class="btn btn-sm btn-ghost" onclick="showPage('pricing');setActiveByPage('pricing')" style="opacity:0.6">🔒 Plan Pro requis</button>`
+              : `<button class="btn btn-sm btn-ghost" onclick="showPage('pricing');setActiveByPage('pricing')">🔒 Limite atteinte</button>`
+          }
+          <button class="btn btn-sm btn-ghost" style="margin-top:6px;display:block">Voir profil</button>
+        </div>
+      `;
+      container.appendChild(card);
+    }, i * 150);
+  });
+
+  // Unlock CTA pour plans limités
+  const unlockDiv = document.getElementById('co-search-unlock');
+  if (!isUnlimited) {
+    unlockDiv.style.display = 'block';
+    document.getElementById('co-unlock-count').textContent = companyPlan === 'starter' ? '54' : '42';
+    document.getElementById('co-export-btn').style.display = 'none';
+  } else {
+    unlockDiv.style.display = 'none';
+    document.getElementById('co-export-btn').style.display = '';
+  }
+}
+
+function resetCompanySearch() {
+  document.getElementById('co-search-step1').classList.remove('hidden');
+  document.getElementById('co-search-step2').classList.add('hidden');
+  document.getElementById('co-search-step3').classList.add('hidden');
+  if (coSearchInterval) clearInterval(coSearchInterval);
 }
 
 // ─── AUTH GUARDS pour boutons publics ───
