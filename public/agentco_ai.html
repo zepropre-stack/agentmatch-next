@@ -30,7 +30,7 @@
   --glow: 0 0 40px rgba(37,99,235,0.15);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; overflow-x: hidden; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; overflow-x: hidden; touch-action: manipulation; }
 /* neural-bg handles home page visual background */
 
 /* SCROLLBAR */
@@ -405,7 +405,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 }
 
 /* ─── FUTURISTIC HOME ANIMATIONS ─── */
-@keyframes floatOrb { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-20px) scale(1.05)} 66%{transform:translate(-20px,15px) scale(.97)} }
+@keyframes floatOrb { 0%,100%{transform:translate(0,0)} 33%{transform:translate(30px,-20px)} 66%{transform:translate(-20px,15px)} }
 @keyframes fadeSlideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
 @keyframes scanLine { 0%{top:0;opacity:1} 100%{top:100%;opacity:0} }
 @keyframes procFill { from{width:0} to{width:100%} }
@@ -2154,6 +2154,12 @@ function initTicker() {
 
 // ─── SCROLL REVEAL ───
 function initScrollReveal() {
+  // Disable reveal animations on touch devices (tablet/mobile) — causes jumps/disappear
+  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  if (isTouch) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    return;
+  }
   const vH = window.innerHeight;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -2178,6 +2184,8 @@ function initScrollReveal() {
 
 // ─── TILT EFFECT ON CARDS ───
 function initTilt() {
+  // Disable tilt on touch devices — causes zoom/jump on tablet
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return;
   document.querySelectorAll('.tilt-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
