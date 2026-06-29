@@ -1244,6 +1244,392 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
   </div>
 </div>
 
+<!-- ════════════════════════════════ DASHBOARD ENTREPRISE ════════════════════════════════ -->
+<div id="page-dashboard-company" class="page">
+  <div class="dash-layout">
+
+    <!-- Sidebar Entreprise -->
+    <div class="dash-sidebar">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:24px">
+        <div style="width:44px;height:44px;background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">N</div>
+        <div>
+          <div style="font-weight:700;font-size:14px">Nextera Solutions</div>
+          <div style="font-size:12px;color:var(--text3)">Plan Pro IA · <span style="color:var(--green)">Actif</span></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Recrutement</div>
+        <button class="sidebar-link active" onclick="showCompanyDash('co-overview',this)">📊 Tableau de bord</button>
+        <button class="sidebar-link" onclick="showCompanyDash('co-missions',this)">📋 Missions publiées <span class="badge">4</span></button>
+        <button class="sidebar-link" onclick="showCompanyDash('co-candidats',this)">👥 Candidats <span class="badge" style="background:var(--gold)">12</span></button>
+        <button class="sidebar-link" onclick="showCompanyDash('co-matching',this)">✨ Matching IA <span class="badge">3</span></button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Gestion</div>
+        <button class="sidebar-link" onclick="showCompanyDash('co-agents',this)">🤝 Mes agents actifs</button>
+        <button class="sidebar-link" onclick="showCompanyDash('co-factu',this)">💳 Facturation</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Usage IA</div>
+        <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px">
+          <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:6px">🤖 MATCHINGS CE MOIS</div>
+          <div style="font-size:28px;font-weight:900;color:var(--blue3)">47</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">/ 100 inclus · Plan Pro</div>
+          <div class="score-bar" style="margin-top:8px"><div class="score-fill" style="width:47%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenu Entreprise -->
+    <div class="dash-content">
+
+      <!-- VUE D'ENSEMBLE -->
+      <div id="co-overview">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="dash-title">Tableau de bord 🏢</div>
+          <button class="btn btn-primary btn-sm" onclick="showCompanyDash('co-missions',document.querySelector('.sidebar-link'))">+ Publier une mission</button>
+        </div>
+        <div class="dash-sub">Nextera Solutions · 4 missions actives · 12 candidats en attente</div>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Agents actifs</div>
+            <div class="kpi-value text-blue">7</div>
+            <div class="kpi-change up">▲ +2 ce mois</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">CA généré via agents</div>
+            <div class="kpi-value text-green">284 000€</div>
+            <div class="kpi-change up">▲ +31% vs T1</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Commissions versées</div>
+            <div class="kpi-value" style="color:var(--gold)">38 200€</div>
+            <div class="kpi-change up">▲ ROI × 7,4</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Score matching moyen</div>
+            <div class="kpi-value" style="color:var(--purple2)">91%</div>
+            <div class="kpi-change up">▲ Top 5% plateforme</div>
+          </div>
+        </div>
+
+        <!-- AI INSIGHT ENTREPRISE -->
+        <div style="background:linear-gradient(135deg,rgba(37,99,235,0.08),rgba(124,58,237,0.05));border:1px solid rgba(59,130,246,0.25);border-radius:16px;padding:20px;margin-bottom:24px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <span style="font-size:20px">🤖</span>
+            <span style="font-weight:700;color:var(--blue3)">Recommandation IA</span>
+            <span style="background:var(--blue);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto">NOUVEAU</span>
+          </div>
+          <p style="font-size:14px;color:var(--text2);line-height:1.7"><b style="color:var(--text)">3 agents</b> correspondent à ≥91% à votre mission <b style="color:var(--gold)">BDR SaaS Île-de-France</b>. L'IA a identifié <b style="color:var(--green)">Marc D.</b> (score 96%) comme candidat prioritaire — 8 ans d'expérience SaaS B2B, disponible immédiatement.</p>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn btn-primary btn-sm" onclick="showCompanyDash('co-matching',document.querySelectorAll('.sidebar-link')[3])">Voir les 3 profils →</button>
+            <button class="btn btn-ghost btn-sm" onclick="showCompanyDash('co-candidats',document.querySelectorAll('.sidebar-link')[2])">Tous les candidats</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Missions actives -->
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:16px">Missions publiées</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                  <span style="font-weight:600;font-size:13px">BDR SaaS B2B · Île-de-France</span>
+                  <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700">● ACTIVE</span>
+                </div>
+                <div style="font-size:12px;color:var(--text2)">Commission 17% · 12 candidats · <b style="color:var(--blue3)">3 matchs IA &gt;90%</b></div>
+              </div>
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                  <span style="font-weight:600;font-size:13px">Closing Grands Comptes · Remote</span>
+                  <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700">● ACTIVE</span>
+                </div>
+                <div style="font-size:12px;color:var(--text2)">Commission 20% · 8 candidats · <b style="color:var(--blue3)">1 match IA &gt;90%</b></div>
+              </div>
+              <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                  <span style="font-weight:600;font-size:13px">Account Executive · PACA</span>
+                  <span style="background:rgba(245,158,11,0.1);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700">◐ EN COURS</span>
+                </div>
+                <div style="font-size:12px;color:var(--text2)">Commission 15% · 4 candidats · Entretiens planifiés</div>
+              </div>
+            </div>
+          </div>
+          <!-- Pipeline candidats -->
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:16px">Pipeline candidats</div>
+            <div class="progress-row">
+              <span class="progress-label" style="font-size:12px">Nouveaux</span>
+              <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--blue)"></div></div>
+              <span class="progress-val text-blue">12</span>
+            </div>
+            <div class="progress-row">
+              <span class="progress-label" style="font-size:12px">Présélectionnés</span>
+              <div class="progress-track"><div class="progress-fill" style="width:58%;background:var(--purple2)"></div></div>
+              <span class="progress-val text-purple">7</span>
+            </div>
+            <div class="progress-row">
+              <span class="progress-label" style="font-size:12px">Entretiens</span>
+              <div class="progress-track"><div class="progress-fill" style="width:33%;background:var(--gold)"></div></div>
+              <span class="progress-val text-gold">4</span>
+            </div>
+            <div class="progress-row">
+              <span class="progress-label" style="font-size:12px">Signés</span>
+              <div class="progress-track"><div class="progress-fill" style="width:17%;background:var(--green)"></div></div>
+              <span class="progress-val text-green">2</span>
+            </div>
+            <div style="margin-top:12px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:10px;font-size:13px;color:var(--text2)">
+              Taux de conversion : <b style="color:var(--green)">17%</b> · Moy. plateforme : 11%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MATCHING IA -->
+      <div id="co-matching" class="hidden">
+        <div class="dash-title">✨ Matching IA</div>
+        <div class="dash-sub">3 profils matchés à ≥91% pour votre mission BDR SaaS B2B</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <!-- Agent 1 — TOP MATCH -->
+          <div style="background:linear-gradient(135deg,rgba(245,158,11,0.06),var(--card));border:1.5px solid var(--gold);border-radius:16px;padding:24px;position:relative">
+            <span style="position:absolute;top:-10px;left:20px;background:linear-gradient(135deg,var(--gold),#d97706);color:#000;font-size:11px;font-weight:800;padding:3px 12px;border-radius:10px">⭐ TOP MATCH IA</span>
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">MD</div>
+              <div style="flex:1;min-width:200px">
+                <div style="font-weight:800;font-size:16px">Marc D. <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:6px">● Disponible</span></div>
+                <div style="color:var(--text2);font-size:13px;margin:2px 0">Senior BDR · 8 ans SaaS B2B · Île-de-France</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                  <span class="tag">SaaS B2B</span><span class="tag">CRM HubSpot</span><span class="tag tag-gold">Top performer</span><span class="tag tag-green">Disponible</span>
+                </div>
+              </div>
+              <div style="text-align:center;flex-shrink:0">
+                <div style="font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--gold),#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent">96%</div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600">score IA</div>
+                <button class="btn btn-sm btn-primary" style="margin-top:8px;background:var(--gold);color:#000">Contacter →</button>
+              </div>
+            </div>
+            <div class="match-breakdown" style="margin-top:16px;grid-template-columns:repeat(4,1fr)">
+              <div class="breakdown-item"><div class="breakdown-label">Secteur</div><div class="breakdown-val text-green">98%</div></div>
+              <div class="breakdown-item"><div class="breakdown-label">Expérience</div><div class="breakdown-val text-blue">95%</div></div>
+              <div class="breakdown-item"><div class="breakdown-label">Zone</div><div class="breakdown-val text-green">100%</div></div>
+              <div class="breakdown-item"><div class="breakdown-label">CA moyen</div><div class="breakdown-val" style="color:var(--gold)">94%</div></div>
+            </div>
+          </div>
+
+          <!-- Agent 2 -->
+          <div style="background:var(--card);border:1.5px solid rgba(59,130,246,0.3);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#059669,#0d9488);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">SC</div>
+              <div style="flex:1;min-width:200px">
+                <div style="font-weight:800;font-size:16px">Sophie C. <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:6px">● Disponible</span></div>
+                <div style="color:var(--text2);font-size:13px;margin:2px 0">Account Executive · 6 ans SaaS · Remote/Paris</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                  <span class="tag">SaaS</span><span class="tag">Closing</span><span class="tag tag-green">Remote OK</span>
+                </div>
+              </div>
+              <div style="text-align:center;flex-shrink:0">
+                <div style="font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--blue3),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">93%</div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600">score IA</div>
+                <button class="btn btn-sm btn-primary" style="margin-top:8px">Contacter →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agent 3 -->
+          <div style="background:var(--card);border:1.5px solid rgba(59,130,246,0.2);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;flex-shrink:0">KL</div>
+              <div style="flex:1;min-width:200px">
+                <div style="font-weight:800;font-size:16px">Kevin L. <span style="background:rgba(245,158,11,0.1);color:var(--gold);font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:6px">◐ Partiel</span></div>
+                <div style="color:var(--text2);font-size:13px;margin:2px 0">BDR / SDR Senior · 5 ans Tech · Île-de-France</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                  <span class="tag">Tech</span><span class="tag">Prospection</span><span class="tag tag-purple">High ticket</span>
+                </div>
+              </div>
+              <div style="text-align:center;flex-shrink:0">
+                <div style="font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--purple2),var(--blue3));-webkit-background-clip:text;-webkit-text-fill-color:transparent">91%</div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600">score IA</div>
+                <button class="btn btn-sm btn-ghost" style="margin-top:8px">Voir profil</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:linear-gradient(135deg,rgba(37,99,235,0.06),rgba(124,58,237,0.04));border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:16px;text-align:center;font-size:13px;color:var(--text2)">
+            🔒 <b style="color:var(--text)">57 autres agents</b> correspondent à &gt;70% — <button onclick="showPage('pricing');setActiveByPage('pricing')" style="background:none;border:none;color:var(--blue3);cursor:pointer;font-weight:700;text-decoration:underline">Passer au plan Business pour tout voir</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSIONS PUBLIÉES -->
+      <div id="co-missions" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div>
+            <div class="dash-title">Missions publiées</div>
+            <div class="dash-sub">4 missions actives · 24 candidats au total</div>
+          </div>
+          <button class="btn btn-primary">+ Nouvelle mission</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:4px">BDR SaaS B2B · Île-de-France</div>
+                <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Commission 17% · Durée 12 mois · Publiée il y a 3 jours</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <span class="tag">SaaS</span><span class="tag">B2B</span><span class="tag tag-green">Disponible immédiat</span>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:24px;font-weight:800;color:var(--blue3)">12</div>
+                <div style="font-size:11px;color:var(--text3)">candidats</div>
+                <div style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:4px">3 matchs &gt;90%</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn btn-sm btn-primary" onclick="showCompanyDash('co-matching',document.querySelectorAll('.sidebar-link')[3])">Voir les matchs IA ✨</button>
+              <button class="btn btn-sm btn-ghost">Modifier</button>
+              <button class="btn btn-sm btn-ghost" style="color:var(--red)">Clôturer</button>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:4px">Closing Grands Comptes · Remote</div>
+                <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Commission 20% · Durée 6 mois · Publiée il y a 1 semaine</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <span class="tag">Closing</span><span class="tag">Enterprise</span><span class="tag tag-purple">High ticket</span>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:24px;font-weight:800;color:var(--blue3)">8</div>
+                <div style="font-size:11px;color:var(--text3)">candidats</div>
+                <div style="background:rgba(37,99,235,0.1);color:var(--blue3);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:4px">1 match &gt;90%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CANDIDATS -->
+      <div id="co-candidats" class="hidden">
+        <div class="dash-title">Candidats</div>
+        <div class="dash-sub">12 candidats en attente de traitement · Triés par score IA</div>
+        <div class="filter-bar">
+          <button class="filter-btn active">Tous (12)</button>
+          <button class="filter-btn">Score &gt;90% (3)</button>
+          <button class="filter-btn">Nouveaux (5)</button>
+          <button class="filter-btn">En entretien (4)</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:var(--card);border:1px solid rgba(245,158,11,0.3);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;flex-shrink:0">MD</div>
+            <div style="flex:1;min-width:150px">
+              <div style="font-weight:700">Marc D. <span style="font-size:10px;background:rgba(245,158,11,0.1);color:var(--gold);padding:1px 6px;border-radius:8px">⭐ TOP</span></div>
+              <div style="font-size:12px;color:var(--text2)">BDR Senior · 8 ans · Île-de-France · Dispo immédiat</div>
+            </div>
+            <div style="font-size:22px;font-weight:800;color:var(--gold);flex-shrink:0">96%</div>
+            <div style="display:flex;gap:8px;flex-shrink:0">
+              <button class="btn btn-sm btn-primary">Contacter</button>
+              <button class="btn btn-sm btn-ghost">Profil</button>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#059669,#0d9488);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;flex-shrink:0">SC</div>
+            <div style="flex:1;min-width:150px">
+              <div style="font-weight:700">Sophie C.</div>
+              <div style="font-size:12px;color:var(--text2)">AE · 6 ans · Remote/Paris · Disponible</div>
+            </div>
+            <div style="font-size:22px;font-weight:800;color:var(--blue3);flex-shrink:0">93%</div>
+            <div style="display:flex;gap:8px;flex-shrink:0">
+              <button class="btn btn-sm btn-primary">Contacter</button>
+              <button class="btn btn-sm btn-ghost">Profil</button>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;flex-shrink:0">KL</div>
+            <div style="flex:1;min-width:150px">
+              <div style="font-weight:700">Kevin L.</div>
+              <div style="font-size:12px;color:var(--text2)">BDR Senior · 5 ans · Île-de-France · Partiel</div>
+            </div>
+            <div style="font-size:22px;font-weight:800;color:var(--purple2);flex-shrink:0">91%</div>
+            <div style="display:flex;gap:8px;flex-shrink:0">
+              <button class="btn btn-sm btn-ghost">Planifier entretien</button>
+              <button class="btn btn-sm btn-ghost">Profil</button>
+            </div>
+          </div>
+          <div style="background:var(--bg2);border:1px dashed var(--border);border-radius:14px;padding:16px;text-align:center;font-size:13px;color:var(--text3)">
+            🔒 9 autres candidats (score 65-89%) — <button onclick="showPage('pricing');setActiveByPage('pricing')" style="background:none;border:none;color:var(--blue3);cursor:pointer;font-weight:600">Voir tous avec Plan Business</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MES AGENTS ACTIFS -->
+      <div id="co-agents" class="hidden">
+        <div class="dash-title">Mes agents actifs</div>
+        <div class="dash-sub">7 agents en mission · CA total ce trimestre : 284 000€</div>
+        <div class="kpi-grid" style="margin-bottom:20px">
+          <div class="kpi"><div class="kpi-label">CA total T2</div><div class="kpi-value text-green">284K€</div><div class="kpi-change up">▲ +31%</div></div>
+          <div class="kpi"><div class="kpi-label">Commissions T2</div><div class="kpi-value" style="color:var(--gold)">38,2K€</div><div class="kpi-change up">▲ ROI ×7,4</div></div>
+          <div class="kpi"><div class="kpi-label">Deals signés</div><div class="kpi-value text-blue">23</div><div class="kpi-change up">▲ +8 vs T1</div></div>
+          <div class="kpi"><div class="kpi-label">Taux success</div><div class="kpi-value" style="color:var(--purple2)">68%</div><div class="kpi-change up">▲ Top 10%</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;flex-shrink:0">TM</div>
+            <div style="flex:1;min-width:150px">
+              <div style="font-weight:700">Thomas M. <span style="font-size:10px;background:rgba(245,158,11,0.1);color:var(--gold);padding:1px 6px;border-radius:8px">⭐ Meilleur agent</span></div>
+              <div style="font-size:12px;color:var(--text2)">BDR Senior · Mission SaaS B2B · 6 mois</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:18px;font-weight:800;color:var(--green)">42 500€</div>
+              <div style="font-size:11px;color:var(--text3)">CA ce mois</div>
+            </div>
+            <button class="btn btn-sm btn-ghost" style="flex-shrink:0">Détails</button>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#059669,#0d9488);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;flex-shrink:0">AL</div>
+            <div style="flex:1;min-width:150px">
+              <div style="font-weight:700">Alice L.</div>
+              <div style="font-size:12px;color:var(--text2)">Closing Senior · Mission Grands comptes · 3 mois</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:18px;font-weight:800;color:var(--green)">28 000€</div>
+              <div style="font-size:11px;color:var(--text3)">CA ce mois</div>
+            </div>
+            <button class="btn btn-sm btn-ghost" style="flex-shrink:0">Détails</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FACTURATION -->
+      <div id="co-factu" class="hidden">
+        <div class="dash-title">Facturation</div>
+        <div class="dash-sub">Plan Pro IA · 149€/mois · Renouvellement le 1er juillet</div>
+        <div class="grid-2">
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:16px">Abonnement actuel</div>
+            <div style="background:linear-gradient(135deg,rgba(37,99,235,0.08),rgba(124,58,237,0.05));border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:16px;margin-bottom:12px">
+              <div style="font-size:11px;color:var(--blue3);font-weight:700;margin-bottom:4px">🔵 PRO IA</div>
+              <div style="font-size:32px;font-weight:900">149<span style="font-size:16px;font-weight:400;color:var(--text2)">€/mois</span></div>
+              <div style="font-size:12px;color:var(--text3);margin-top:4px">100 matchings IA · 10 missions · Contacts illimités</div>
+            </div>
+            <button class="btn btn-gold btn-sm" style="width:100%">Passer au Business 219€/mois →</button>
+          </div>
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:16px">Usage ce mois</div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Matchings IA</span><div class="progress-track"><div class="progress-fill" style="width:47%;background:var(--blue)"></div></div><span class="progress-val text-blue">47/100</span></div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Missions actives</span><div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--green)"></div></div><span class="progress-val text-green">4/10</span></div>
+            <div class="progress-row"><span class="progress-label" style="font-size:12px">Contacts vus</span><div class="progress-track"><div class="progress-fill" style="width:23%;background:var(--gold)"></div></div><span class="progress-val text-gold">23/∞</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- fin dash-content -->
+  </div><!-- fin dash-layout -->
+</div>
+
 <!-- ════════════════════════════════ PRICING ════════════════════════════════ -->
 <div id="page-pricing" class="page">
   <div style="padding:60px 48px">
@@ -3483,8 +3869,21 @@ function demoLogin(role) {
     showToast('✅ Connecté en démo — Agent commercial', 'success');
   }
   updateNavForUser(Auth.user());
-  showPage('dashboard');
-  setActiveByPage('dashboard');
+  if (role === 'COMPANY') {
+    showPage('dashboard-company');
+    setActiveByPage('dashboard-company');
+  } else {
+    showPage('dashboard');
+    setActiveByPage('dashboard');
+  }
+}
+
+function showCompanyDash(id, el) {
+  document.querySelectorAll('#page-dashboard-company .dash-content > div').forEach(d => d.classList.add('hidden'));
+  const target = document.getElementById(id);
+  if (target) target.classList.remove('hidden');
+  document.querySelectorAll('#page-dashboard-company .sidebar-link').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
 }
 
 // ─── AUTH GUARDS pour boutons publics ───
