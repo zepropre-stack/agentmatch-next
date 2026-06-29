@@ -1668,6 +1668,7 @@ function runMatching() {
 }
 
 function runMatchingAgent() {
+  if (!Auth.isLoggedIn()) { showModal('signup-agent'); return; }
   const resultsEl = document.getElementById('match-results');
   resultsEl.innerHTML = `<div style="text-align:center;padding:40px"><div style="font-size:32px;margin-bottom:16px"><span class="spin">🔍</span></div><div style="font-size:18px;font-weight:700">Recherche des meilleures missions…</div></div>`;
   resultsEl.classList.remove('hidden');
@@ -3158,9 +3159,8 @@ async function runMatching() {
   resultsEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:32px;margin-bottom:16px"><span class="spin">⚙️</span></div><div style="font-size:18px;font-weight:700;margin-bottom:8px">Analyse IA en cours...</div><div style="color:var(--text2);font-size:14px">Analyse sur 47 criteres</div></div>';
   resultsEl.classList.remove('hidden');
   resultsEl.scrollIntoView({ behavior:'smooth', block:'start' });
-  if (!Auth.isLoggedIn() || Auth.user()?.role !== 'COMPANY') {
-    setTimeout(_showDemoMatchResults, 2200); return;
-  }
+  if (!Auth.isLoggedIn()) { showPage('pricing'); setActiveByPage('pricing'); return; }
+  if (Auth.user()?.role !== 'COMPANY') { showPage('pricing'); setActiveByPage('pricing'); return; }
   const missionSelect = document.getElementById('m-mission-select');
   const missionId = missionSelect?.value;
   if (!missionId) { setTimeout(_showDemoMatchResults, 2200); return; }
