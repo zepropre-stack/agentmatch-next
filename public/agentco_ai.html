@@ -595,6 +595,214 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
   50%      { opacity: .45; }
 }
 
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE MOBILE — CORRECTIONS COMPLÈTES
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Bottom nav mobile pour dashboards ── */
+.dash-mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  z-index: 900;
+  padding: 8px 0 env(safe-area-inset-bottom, 8px);
+}
+.dash-mobile-nav-inner {
+  display: flex;
+  overflow-x: auto;
+  gap: 2px;
+  padding: 0 8px;
+  scrollbar-width: none;
+}
+.dash-mobile-nav-inner::-webkit-scrollbar { display: none; }
+.dash-mobile-tab {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  color: var(--text3);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.dash-mobile-tab .tab-icon { font-size: 18px; }
+.dash-mobile-tab.active { color: var(--blue3); background: rgba(37,99,235,0.1); }
+
+/* ── Back button messagerie mobile ── */
+.msg-mobile-back {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  border: none;
+  color: var(--blue3);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+
+  /* ── Dashboard ── */
+  .dash-mobile-nav { display: block; }
+  /* Évite que le contenu soit caché par le bottom nav */
+  #page-dashboard .dash-content,
+  #page-dashboard-company .dash-content { padding-bottom: 80px !important; }
+
+  /* ── Messagerie mobile — afficher le bouton back + threads cliquables ── */
+  .msg-mobile-back { display: flex; }
+  .msg-layout { grid-template-columns: 1fr !important; height: auto !important; min-height: 70vh; }
+  .msg-threads {
+    display: flex !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .msg-threads.hidden-mobile { display: none !important; }
+  .msg-view.hidden-mobile { display: none !important; }
+
+  /* ── HOW IT WORKS — grid 5 colonnes → colonne ── */
+  #hiw-co > div[style*="grid-template-columns"],
+  #hiw-ag > div[style*="grid-template-columns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    max-width: 100% !important;
+    padding: 0 4px !important;
+  }
+  /* Masquer les flèches → sur mobile */
+  #hiw-co > div > div[style*="opacity:0.5"],
+  #hiw-ag > div > div[style*="opacity:0.5"] { display: none !important; }
+
+  /* Toggle HIW buttons → stack */
+  #hiw-btn-co, #hiw-btn-ag {
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+  }
+
+  /* ── AI Processor wrapper — override inline padding ── */
+  .ai-proc-wrapper { padding: 0 12px !important; margin-bottom: 40px !important; }
+  .ai-processor { padding: 20px 16px !important; }
+  .ai-proc-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .ai-proc-brain { display: none !important; }
+
+  /* ── Proof bar → colonne ── */
+  div[style*="flex:1;padding:20px;text-align:center;border-right"] {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  /* Flex parent proof bar → column */
+  .reveal > div[style*="display:flex;gap:0;background:var(--card)"] {
+    flex-direction: column !important;
+  }
+
+  /* ── Profile page ── */
+  .profile-hero { padding: 24px 16px !important; }
+  .profile-layout { flex-direction: column !important; gap: 16px; }
+  .profile-avatar-lg { width: 72px !important; height: 72px !important; font-size: 28px !important; }
+  .profile-info h1 { font-size: 20px !important; }
+  .profile-stats { gap: 12px; flex-wrap: wrap; }
+
+  /* ── Section inline padding overrides ── */
+  div[style*="padding:0 64px"] { padding: 0 12px !important; }
+  div[style*="padding: 0 64px"] { padding: 0 12px !important; }
+
+  /* ── Hero inline padding ── */
+  .hero[style*="padding-top"] { padding: 88px 16px 40px !important; }
+
+  /* ── Pricing cards ne débordent pas ── */
+  .plan-card { padding: 24px 16px !important; }
+  .plan-price { font-size: 36px !important; }
+
+  /* ── KPI grid → 2 col ── */
+  .kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .kpi { padding: 14px !important; }
+  .kpi-value { font-size: 22px !important; }
+
+  /* ── Stats hero ── */
+  .futu-stat .stat-num { font-size: 28px !important; }
+  .hero-stats { gap: 8px 20px; }
+
+  /* ── Sections heading ── */
+  .section-title { font-size: 26px !important; }
+  .section-sub { font-size: 14px !important; }
+
+  /* ── Success stories / testimonials ── */
+  .testimonial-grid,
+  div[style*="grid-template-columns: repeat(3"] { grid-template-columns: 1fr !important; }
+
+  /* ── Match breakdown → 2 col ── */
+  .match-breakdown { grid-template-columns: repeat(2,1fr) !important; }
+  .match-form { padding: 20px 14px !important; }
+
+  /* ── Chat ── */
+  .chat-container { padding: 12px; }
+  .chat-suggestions { padding: 6px 12px 0; }
+  .suggestion-chip { font-size: 11px; padding: 5px 10px; }
+
+  /* ── Toast ── */
+  .toast-container { bottom: 72px; right: 12px; left: 12px; }
+  .toast { min-width: unset; width: 100%; }
+
+  /* ── Modal ── */
+  .modal-overlay { align-items: flex-end; }
+  .modal { border-radius: 20px 20px 0 0; max-height: 85vh; width: 100%; max-width: 100%; }
+
+  /* ── Agent IA chat flottant ── */
+  #ai-chat-window { width: calc(100vw - 24px) !important; right: 12px !important; bottom: 72px !important; }
+
+  /* ── Free banner ── */
+  .free-banner { padding: 20px 16px !important; }
+
+  /* ── Tabs scroll horizontal ── */
+  .tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  /* ── Filter bar scroll ── */
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  /* ── Dash title ── */
+  .dash-title { font-size: 18px !important; }
+
+}
+
+  /* ── Pricing page wrapper ── */
+  .pricing-page-wrapper { padding: 32px 14px !important; }
+  h1[style*="font-size:44px"] { font-size: 26px !important; }
+
+  /* ── Company dashboard search page ── */
+  #co-search { padding: 0 !important; }
+  #co-search > div[style*="padding"] { padding: 16px !important; }
+
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+  nav { padding: 0 12px !important; }
+  .logo-text { font-size: 16px !important; }
+  .hero h1 { font-size: 22px !important; }
+  .hero p { font-size: 14px !important; }
+  .btn-lg { padding: 12px 20px !important; font-size: 14px !important; }
+  .plan-price { font-size: 30px !important; }
+  .section { padding: 32px 12px !important; }
+  .pricing-page-wrapper { padding: 24px 10px !important; }
+}
+
 </style>
 </head>
 <body>
@@ -1619,9 +1827,9 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
       <div id="dash-messages" class="hidden">
         <div class="dash-title">💬 Messagerie</div>
         <div class="dash-sub">3 messages non lus · Conversations avec vos entreprises partenaires</div>
-        <div class="msg-layout">
+        <div class="msg-layout" id="agent-msg-layout">
           <!-- Threads -->
-          <div class="msg-threads">
+          <div class="msg-threads" id="agent-msg-threads">
             <div class="msg-threads-header">
               Conversations
               <span style="font-size:11px;background:var(--blue);color:white;padding:2px 8px;border-radius:10px">3 non lus</span>
@@ -1674,6 +1882,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           </div>
           <!-- Vue conversation -->
           <div class="msg-view" id="agent-msg-view">
+            <button class="msg-mobile-back" onclick="showMsgThreads('agent')" id="agent-msg-back">← Retour aux conversations</button>
             <div class="msg-view-header" id="agent-thread-header">
               <div class="msg-thread-avatar" id="agent-thread-avatar" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)">N</div>
               <div>
@@ -1692,6 +1901,17 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
         </div>
       </div>
 
+    </div>
+  </div>
+  <!-- Bottom nav mobile — agent dashboard -->
+  <div class="dash-mobile-nav" id="agent-mobile-nav">
+    <div class="dash-mobile-nav-inner">
+      <button class="dash-mobile-tab active" onclick="showDash('overview',this);updateMobileNav('agent',this)"><span class="tab-icon">📊</span>Vue d'ensemble</button>
+      <button class="dash-mobile-tab" onclick="showDash('missions-dash',this);updateMobileNav('agent',this)"><span class="tab-icon">📋</span>Missions</button>
+      <button class="dash-mobile-tab" onclick="showDash('ia-reco',this);updateMobileNav('agent',this)"><span class="tab-icon">✨</span>IA Reco</button>
+      <button class="dash-mobile-tab" onclick="showDash('notifs',this);updateMobileNav('agent',this)"><span class="tab-icon">🔔</span>Notifs</button>
+      <button class="dash-mobile-tab" onclick="showDash('messages',this);openThread('thread-1','agent');updateMobileNav('agent',this)"><span class="tab-icon">💬</span>Messages</button>
+      <button class="dash-mobile-tab" onclick="showDash('profil',this);updateMobileNav('agent',this)"><span class="tab-icon">👤</span>Profil</button>
     </div>
   </div>
 </div>
@@ -2410,6 +2630,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
             </div>
           </div>
           <div class="msg-view" id="co-msg-view">
+            <button class="msg-mobile-back" onclick="showMsgThreads('company')" id="co-msg-back">← Retour aux conversations</button>
             <div class="msg-view-header" id="co-thread-header">
               <div class="msg-thread-avatar" id="co-thread-avatar" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed)">TM</div>
               <div>
@@ -2504,11 +2725,22 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 
     </div><!-- fin dash-content -->
   </div><!-- fin dash-layout -->
+  <!-- Bottom nav mobile — company dashboard -->
+  <div class="dash-mobile-nav" id="co-mobile-nav">
+    <div class="dash-mobile-nav-inner">
+      <button class="dash-mobile-tab active" onclick="showCompanyDash('co-overview',this);updateMobileNav('co',this)"><span class="tab-icon">📊</span>Overview</button>
+      <button class="dash-mobile-tab" onclick="showCompanyDash('co-search',this);updateMobileNav('co',this)"><span class="tab-icon">🔍</span>Recherche IA</button>
+      <button class="dash-mobile-tab" onclick="showCompanyDash('co-candidates',this);updateMobileNav('co',this)"><span class="tab-icon">👥</span>Candidats</button>
+      <button class="dash-mobile-tab" onclick="showCompanyDash('co-analytics',this);updateMobileNav('co',this)"><span class="tab-icon">📈</span>Analytics</button>
+      <button class="dash-mobile-tab" onclick="showCompanyDash('co-messages',this);openThread('co-thread-1','company');updateMobileNav('co',this)"><span class="tab-icon">💬</span>Messages</button>
+      <button class="dash-mobile-tab" onclick="showCompanyDash('co-missions',this);updateMobileNav('co',this)"><span class="tab-icon">📋</span>Missions</button>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════ PRICING ════════════════════════════════ -->
 <div id="page-pricing" class="page">
-  <div style="padding:60px 48px">
+  <div class="pricing-page-wrapper" style="padding:60px 48px">
 
     <!-- HEADER -->
     <div style="text-align:center;margin-bottom:48px">
@@ -3200,6 +3432,43 @@ function toggleMobileMenu() {
 function closeMobileMenu() {
   document.getElementById('mobile-menu').classList.remove('open');
   document.body.style.overflow='';
+}
+
+// ─── DASHBOARD MOBILE NAV ───
+function updateMobileNav(type, el) {
+  const nav = document.getElementById(type === 'co' ? 'co-mobile-nav' : 'agent-mobile-nav');
+  if (!nav) return;
+  nav.querySelectorAll('.dash-mobile-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+// ─── MESSAGERIE MOBILE — back to threads ───
+function showMsgThreads(type) {
+  if (type === 'agent') {
+    const threads = document.getElementById('agent-msg-threads');
+    const view = document.getElementById('agent-msg-view');
+    if (threads) threads.classList.remove('hidden-mobile');
+    if (view) view.classList.add('hidden-mobile');
+  } else {
+    const threads = document.querySelector('#co-messages .msg-threads');
+    const view = document.getElementById('co-msg-view');
+    if (threads) threads.classList.remove('hidden-mobile');
+    if (view) view.classList.add('hidden-mobile');
+  }
+}
+function showMsgView(type) {
+  if (window.innerWidth > 768) return; // desktop: no change needed
+  if (type === 'agent') {
+    const threads = document.getElementById('agent-msg-threads');
+    const view = document.getElementById('agent-msg-view');
+    if (threads) threads.classList.add('hidden-mobile');
+    if (view) view.classList.remove('hidden-mobile');
+  } else {
+    const threads = document.querySelector('#co-messages .msg-threads');
+    const view = document.getElementById('co-msg-view');
+    if (threads) threads.classList.add('hidden-mobile');
+    if (view) view.classList.remove('hidden-mobile');
+  }
 }
 
 // ─── MODALS ───
@@ -4941,6 +5210,9 @@ function openThread(threadId, dashType) {
 
   // Decrement badge
   updateMsgBadge(dashType);
+
+  // Sur mobile : masquer la liste de threads, montrer la vue message
+  showMsgView(dashType);
 }
 
 function renderMsg(container, msg) {
