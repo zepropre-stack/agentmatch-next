@@ -731,13 +731,59 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
       </button>
     </div>
 
-    <!-- STATS -->
-    <div class="hero-stats" style="animation:fadeSlideDown .7s .5s ease both;margin-top:60px">
-      <div class="stat futu-stat"><div class="stat-num" data-count="57412" data-suffix="K+">57K+</div><div class="stat-label">Agents freelance</div></div>
-      <div class="stat futu-stat"><div class="stat-num" data-count="30000" data-suffix="K+">30K+</div><div class="stat-label">Entreprises</div></div>
-      <div class="stat futu-stat"><div class="stat-num" data-count="95" data-suffix="%">95%</div><div class="stat-label">Score matching IA</div></div>
-      <div class="stat futu-stat"><div class="stat-num" data-count="3" data-suffix="x">3x</div><div class="stat-label">Plus rapide</div></div>
-      <div class="stat futu-stat"><div class="stat-num" data-count="2.4" data-suffix="s">2.4s</div><div class="stat-label">Temps de matching</div></div>
+    <!-- LIVE STATS -->
+    <div style="animation:fadeSlideDown .7s .5s ease both;margin-top:60px">
+      <!-- Badge live -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px">
+        <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--green)">
+          <span style="width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 1.5s infinite"></span>
+          EN DIRECT — Plateforme active
+        </span>
+      </div>
+
+      <!-- Compteurs -->
+      <div class="hero-stats">
+        <!-- Agents -->
+        <div class="stat futu-stat" style="position:relative">
+          <div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite"></span>Live
+          </div>
+          <div class="stat-num" id="live-agents" data-count="57412" data-suffix="" data-live="true" data-increment="1" data-interval="4000">57 412</div>
+          <div class="stat-label">agents actifs</div>
+        </div>
+
+        <!-- Entreprises -->
+        <div class="stat futu-stat">
+          <div style="font-size:11px;color:var(--blue3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Total</div>
+          <div class="stat-num" id="live-companies" data-count="30000" data-suffix="+" data-live="false">30 000+</div>
+          <div class="stat-label">entreprises partenaires</div>
+        </div>
+
+        <!-- Missions actives -->
+        <div class="stat futu-stat" style="position:relative">
+          <div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s .5s infinite"></span>Live
+          </div>
+          <div class="stat-num" id="live-missions" data-count="2847" data-suffix="" data-live="true" data-increment="1" data-interval="7000">2 847</div>
+          <div class="stat-label">missions publiées</div>
+        </div>
+
+        <!-- CA généré -->
+        <div class="stat futu-stat" style="position:relative">
+          <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px">
+            <span style="width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s 1s infinite"></span>Ce mois
+          </div>
+          <div class="stat-num" id="live-ca" data-count="1200000" data-suffix="" data-live="true" data-increment="500" data-interval="3000" style="background:linear-gradient(135deg,var(--gold),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent">1,2M€</div>
+          <div class="stat-label">CA généré via agents</div>
+        </div>
+
+        <!-- Matching -->
+        <div class="stat futu-stat">
+          <div style="font-size:11px;color:var(--blue3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">IA</div>
+          <div class="stat-num" data-count="2.4" data-suffix="s">2.4s</div>
+          <div class="stat-label">temps de matching</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3125,28 +3171,80 @@ function renderCompareTable() {
 })();
 
 // ─── ANIMATED COUNTERS ───
+function formatLiveVal(val, id) {
+  if (id === 'live-ca') {
+    // Format M€
+    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M€';
+    return Math.round(val / 1000) + 'K€';
+  }
+  // Format with spaces for thousands
+  if (val >= 10000) return Math.round(val).toLocaleString('fr-FR');
+  if (val >= 1000) return Math.round(val).toLocaleString('fr-FR');
+  return Math.round(val).toString();
+}
+
 function animateCounters() {
   document.querySelectorAll('.stat-num[data-count]').forEach(el => {
     const target = parseFloat(el.dataset.count);
     const suffix = el.dataset.suffix || '';
-    const duration = 1800;
+    const isLive = el.dataset.live === 'true';
+    const duration = 2000;
     const start = Date.now();
+    let current = target;
+
     function update() {
       const elapsed = Date.now() - start;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       const val = target * eased;
-      if (target >= 1000) {
+
+      if (el.id && el.id.startsWith('live-')) {
+        el.textContent = formatLiveVal(val, el.id) + suffix;
+        current = val;
+      } else if (target >= 1000) {
         el.textContent = (val / 1000).toFixed(0) + suffix;
       } else if (target % 1 !== 0) {
         el.textContent = val.toFixed(1) + suffix;
       } else {
         el.textContent = Math.round(val) + suffix;
       }
-      if (progress < 1) requestAnimationFrame(update);
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else if (isLive) {
+        // Start live ticker after animation completes
+        current = target;
+        startLiveTicker(el, current);
+      }
     }
     requestAnimationFrame(update);
   });
+}
+
+function startLiveTicker(el, startVal) {
+  const increment = parseFloat(el.dataset.increment) || 1;
+  const interval = parseInt(el.dataset.interval) || 5000;
+  let current = startVal;
+
+  setInterval(() => {
+    // Random increment between 1 and increment*2
+    const delta = Math.ceil(Math.random() * increment * 2);
+    current += delta;
+
+    // Flash animation
+    el.style.transition = 'color .2s';
+    const origGrad = el.style.background;
+    if (el.id === 'live-ca') {
+      el.style.webkitTextFillColor = '#fbbf24';
+    } else {
+      el.style.webkitTextFillColor = 'var(--green2)';
+    }
+    setTimeout(() => {
+      el.style.webkitTextFillColor = '';
+    }, 400);
+
+    el.textContent = formatLiveVal(current, el.id);
+  }, interval + Math.random() * 2000);
 }
 
 // ─── AI PROCESSOR COUNTER ───
