@@ -2348,13 +2348,7 @@ const AI_KB = [
   {
     tags: ['prix','tarif','coût','abonnement','combien','payer','pack','offre','plan','starter','pro','business','forfait'],
     responses: [
-      "On a 3 formules adaptées à votre taille :
-
-🟢 **Starter** — 89€/mois : postez des missions et recevez des candidatures directement.
-🔵 **Pro IA** — 149€/mois : notre IA cherche activement les meilleurs profils pour vous.
-🟣 **Business** — 219€/mois : tout inclus, accès illimité + assistant IA dédié.
-
-Sur l'annuel, vous économisez jusqu'à -17%. Laquelle correspond le mieux à votre besoin ?",
+      "On a 3 formules adaptées à votre taille :\n\n🟢 **Starter** — 89€/mois : postez des missions et recevez des candidatures directement.\n🔵 **Pro IA** — 149€/mois : notre IA cherche activement les meilleurs profils pour vous.\n🟣 **Business** — 219€/mois : tout inclus, accès illimité + assistant IA dédié.\n\nSur l'annuel, vous économisez jusqu'à -17%. Laquelle correspond le mieux à votre besoin ?",
       "Nos tarifs démarrent à **89€/mois** sans engagement 🎉 Vous payez uniquement quand vous recrutez — pas de frais au succès cachés. Pour quel volume de recrutements vous situez-vous ?"
     ]
   },
@@ -2375,22 +2369,14 @@ Sur l'annuel, vous économisez jusqu'à -17%. Laquelle correspond le mieux à vo
   {
     tags: ['entreprise','recruteur','recruter','trouver','cherche','besoin','embaucher','sourcing'],
     responses: [
-      "Pour les entreprises, notre IA fait le tri parmi 57 412 agents commerciaux freelance en France. Vous décrivez votre besoin (secteur, zone, type de mission) et on vous présente les 3 meilleurs profils en moins de 3 secondes.
-
-Vous cherchez dans quel secteur ? Je peux vous donner une idée des profils disponibles 🎯",
+      "Pour les entreprises, notre IA fait le tri parmi 57 412 agents commerciaux freelance en France. Vous décrivez votre besoin (secteur, zone, type de mission) et on vous présente les 3 meilleurs profils en moins de 3 secondes.\n\nVous cherchez dans quel secteur ? Je peux vous donner une idée des profils disponibles 🎯",
       "Super ! Notre moteur IA analyse la compatibilité sectorielle, comportementale et géographique pour vous trouver le commercial idéal. Quel est votre secteur d'activité ?"
     ]
   },
   {
     tags: ['comment','fonctionne','marche','fonctionnement','processus','étape','comment ça'],
     responses: [
-      "C'est simple en 3 étapes ⚡
-
-1️⃣ **Vous publiez votre besoin** — secteur, zone, type de mission, budget
-2️⃣ **Notre IA analyse** 57 000+ profils en temps réel et calcule un score de compatibilité
-3️⃣ **Vous recevez les 3 meilleurs profils** avec contacts directs, CV et disponibilités
-
-La plupart de nos clients trouvent leur agent en moins de 48h. Impressionnant non ? 😊",
+      "C'est simple en 3 étapes ⚡\n\n1️⃣ **Vous publiez votre besoin** — secteur, zone, type de mission, budget\n2️⃣ **Notre IA analyse** 57 000+ profils en temps réel et calcule un score de compatibilité\n3️⃣ **Vous recevez les 3 meilleurs profils** avec contacts directs, CV et disponibilités\n\nLa plupart de nos clients trouvent leur agent en moins de 48h. Impressionnant non ? 😊",
       "Le matching se fait en 3 étapes en 2,4 secondes en moyenne ! Vous décrivez votre besoin → l'IA score tous les agents → vous recevez les top 3. Vous pouvez tester la démo gratuite pour le voir en vrai !"
     ]
   },
@@ -2514,9 +2500,7 @@ function initAIChat() {
   const msgs = document.getElementById('ai-chat-messages');
   msgs.innerHTML = '';
   // Welcome message
-  addAIMessage('bot', "Bonjour ! 👋 Je suis **Alex**, conseiller IA AgentMatch.
-
-Je peux répondre à toutes vos questions sur la plateforme, les tarifs, le fonctionnement, ou vous guider dans votre démarche. Que puis-je faire pour vous ?");
+  addAIMessage('bot', "Bonjour ! 👋 Je suis **Alex**, conseiller IA AgentMatch.\n\nJe peux répondre à toutes vos questions sur la plateforme, les tarifs, le fonctionnement, ou vous guider dans votre démarche. Que puis-je faire pour vous ?");
   // Quick replies
   renderQuickReplies(AI_QUICK_INIT);
 }
