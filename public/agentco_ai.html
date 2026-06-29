@@ -2524,11 +2524,8 @@ function addAIMessage(type, text) {
   // Basic markdown: **bold**
   div.innerHTML = text
     .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-    .replace(/
-
-/g, '<br><br>')
-    .replace(/
-/g, '<br>');
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   return div;
