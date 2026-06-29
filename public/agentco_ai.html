@@ -1805,7 +1805,7 @@ function removeTyping() {
 }
 
 // ─── MODALS ───
-function showModal(id) { document.getElementById('modal-' + id)?.classList.add('open'); }
+function showModal(id) { const m=document.getElementById('modal-'+id); if(m){m.style.display='';m.classList.add('open');} }
 function closeModal(id) { document.getElementById('modal-' + id)?.classList.remove('open'); }
 
 // ─── TOASTS ───
