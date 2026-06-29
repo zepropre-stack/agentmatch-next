@@ -2464,7 +2464,7 @@ const AI_QUICK_INIT = [
   { label: '💰 Voir les tarifs', msg: 'Quels sont vos tarifs ?' },
   { label: '🤖 Comment ça marche ?', msg: 'Comment fonctionne le matching IA ?' },
   { label: '🆓 Demo gratuite', msg: 'Je veux tester la démo' },
-  { label: '👤 Je suis agent', msg: 'Comment m'inscrire en tant qu'agent ?' }
+  { label: '👤 Je suis agent', msg: 'Comment m\'inscrire en tant qu\'agent ?' }
 ];
 
 function toggleAIChat() {
@@ -2594,7 +2594,7 @@ function processAIInput(text) {
       // Context-specific quick replies
       if (best.tags.includes('prix')) {
         quickReplies = [
-          { label: '🆓 Demo d'abord', msg: 'Je veux tester avant de payer' },
+          { label: '🆓 Demo d\'abord', msg: 'Je veux tester avant de payer' },
           { label: '📞 Parler à un conseiller', msg: 'Je voudrais parler à un humain' },
           { label: '🚀 M'inscrire', msg: 'Comment m'inscrire ?' }
         ];
@@ -2606,7 +2606,7 @@ function processAIInput(text) {
         ];
       } else if (best.tags.includes('agent')) {
         quickReplies = [
-          { label: '📝 S'inscrire maintenant', msg: 'Comment créer mon profil agent ?' },
+          { label: '📝 S\'inscrire maintenant', msg: 'Comment créer mon profil agent ?' },
           { label: '💼 Voir les missions', msg: 'Quelles missions sont disponibles ?' }
         ];
       } else {
