@@ -720,11 +720,11 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 
     <!-- CTAs -->
     <div class="hero-ctas" style="animation:fadeSlideDown .7s .4s ease forwards">
-      <button class="btn btn-primary btn-lg glow-btn" onclick="openDemo()">
-        ▶ Demo gratuite — voir l'IA en action
+      <button class="btn btn-primary btn-lg glow-btn" onclick="openDemo('entreprise')">
+        🏢 Demo entreprise — voir le matching IA
       </button>
-      <button class="btn btn-lg" onclick="showModal('signup-agent')" style="background:var(--green);color:white;box-shadow:0 4px 20px rgba(16,185,129,0.3)">
-        👤 Espace agent — Gratuit
+      <button class="btn btn-lg" onclick="openDemo('agent')" style="background:var(--green);color:white;box-shadow:0 4px 20px rgba(16,185,129,0.3)">
+        👤 Demo agent — voir les missions dispo
       </button>
       <button class="btn btn-gold btn-lg" onclick="showPage('pricing');setActiveByPage('pricing')">
         🏢 Offres entreprises
@@ -866,6 +866,14 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
       <div>
         <h1 style="font-size:28px;font-weight:800;margin-bottom:4px">Agents commerciaux</h1>
         <p style="color:var(--text2);font-size:14px">🤖 <b style="color:var(--blue3)">57 412</b> agents disponibles • Triés par score IA pour votre profil</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-shrink:0">
+        <button class="btn btn-primary" onclick="openDemo('entreprise')" style="white-space:nowrap">
+          🔍 Demo entreprise — trouver un agent
+        </button>
+        <button class="btn" onclick="openDemo('agent')" style="background:var(--green);color:white;white-space:nowrap;box-shadow:0 4px 12px rgba(16,185,129,0.3)">
+          👤 Demo agent — voir mes missions
+        </button>
       </div>
     </div>
 
@@ -2322,8 +2330,84 @@ const DEMO_LOGS = [
 let demoCurrentStep = 1;
 let demoInterval = null;
 
-function openDemo() {
+let demoMode = 'entreprise';
+
+const DEMO_MISSIONS = {
+  tech: [
+    { emoji: '💻', company: 'Éditeur SaaS RH', location: 'Île-de-France', mission: 'Prospection & Closing B2B', commission: '15%', potentiel: '3 200€', duree: '6 mois', score: 94 },
+    { emoji: '📱', company: 'Scale-up FinTech', location: 'Full remote', mission: 'BDR / Account Executive', commission: '18%', potentiel: '4 100€', duree: '12 mois', score: 91 },
+    { emoji: '🔐', company: 'Startup Cybersécurité', location: 'PACA + Remote', mission: 'Closing grands comptes', commission: '20%', potentiel: '5 800€', duree: '6 mois', score: 87 }
+  ],
+  immo: [
+    { emoji: '🏢', company: 'Promoteur national', location: 'Île-de-France', mission: 'Vente programmes neufs', commission: '2,5%', potentiel: '4 500€', duree: '12 mois', score: 92 },
+    { emoji: '🏠', company: 'Réseau mandataires', location: 'Auvergne-Rhône-Alpes', mission: 'Transaction résidentielle', commission: '3%', potentiel: '3 800€', duree: 'Durée libre', score: 88 },
+    { emoji: '🏭', company: 'Foncière entreprise', location: 'Grand Est', mission: 'Immobilier commercial', commission: '2%', potentiel: '6 200€', duree: '6 mois', score: 85 }
+  ],
+  finance: [
+    { emoji: '💰', company: 'Cabinet de courtage', location: 'France entière', mission: 'Apporteur crédit pro', commission: '1,2%', potentiel: '2 900€', duree: 'Récurrent', score: 93 },
+    { emoji: '📊', company: 'Banque en ligne B2B', location: 'Full remote', mission: 'Acquisition PME', commission: '15%', potentiel: '3 600€', duree: '12 mois', score: 89 },
+    { emoji: '🛡️', company: 'Assureur spécialisé', location: 'Île-de-France', mission: 'Vente assurance prévoyance', commission: '25%', potentiel: '4 200€', duree: '6 mois', score: 86 }
+  ],
+  industrie: [
+    { emoji: '🏭', company: 'Fabricant machines-outils', location: 'Grand Est', mission: 'Vente B2B industrie', commission: '8%', potentiel: '3 500€', duree: '12 mois', score: 91 },
+    { emoji: '⚡', company: 'Fournisseur EnR', location: 'Nouvelle-Aquitaine', mission: 'Développement commercial', commission: '12%', potentiel: '4 800€', duree: '6 mois', score: 88 },
+    { emoji: '🔧', company: 'Distributeur BTP', location: 'PACA', mission: 'Account Manager', commission: '7%', potentiel: '2 800€', duree: '12 mois', score: 84 }
+  ],
+  sante: [
+    { emoji: '🏥', company: 'Startup MedTech', location: 'Île-de-France', mission: 'Vente dispositifs médicaux', commission: '10%', potentiel: '4 200€', duree: '6 mois', score: 92 },
+    { emoji: '💊', company: 'Laboratoire pharma', location: 'France entière', mission: 'Délégué médical freelance', commission: '12%', potentiel: '3 700€', duree: '12 mois', score: 88 },
+    { emoji: '🧬', company: 'Scale-up e-santé', location: 'Full remote', mission: 'BDR cliniques & hôpitaux', commission: '15%', potentiel: '5 100€', duree: '6 mois', score: 85 }
+  ],
+  retail: [
+    { emoji: '🛍️', company: 'Marque DTC mode', location: 'Paris', mission: 'Développement wholesale', commission: '8%', potentiel: '2 800€', duree: '12 mois', score: 90 },
+    { emoji: '🛒', company: 'Pure player e-com', location: 'Full remote', mission: 'Partenariats marketplace', commission: '10%', potentiel: '3 400€', duree: '6 mois', score: 87 },
+    { emoji: '🏪', company: 'Réseau franchise', location: 'Hauts-de-France', mission: 'Apporteur franchisés', commission: '15%', potentiel: '4 600€', duree: 'Récurrent', score: 84 }
+  ]
+};
+
+const AGENT_DEMO_LOGS = [
+  '> Analyse de votre spécialité sectorielle…',
+  '> Scan de 2 847 missions actives…',
+  '> Calcul du score compatibilité profil/mission…',
+  '> Évaluation du potentiel de gains…',
+  '> Vérification disponibilités entreprises…',
+  '> Tri par commission et adéquation profil…',
+  '> Sélection des 3 meilleures opportunités…',
+  '> Rapport prêt ✓'
+];
+
+function openDemo(type) {
+  demoMode = type || 'entreprise';
   demoCurrentStep = 1;
+
+  // Toggle forms
+  document.getElementById('demo-form-entreprise').style.display = demoMode === 'entreprise' ? 'flex' : 'none';
+  document.getElementById('demo-form-agent').style.display = demoMode === 'agent' ? 'flex' : 'none';
+
+  // Update header content
+  const header = document.getElementById('demo-modal-header');
+  if (demoMode === 'agent') {
+    header.innerHTML = `
+      <button onclick="closeModal('demo')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">×</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#86efac;letter-spacing:1px">MODE DÉMO AGENT</span>
+        <span id="demo-step-badge" style="background:var(--green);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:white">Étape 1 / 3</span>
+      </div>
+      <h2 style="color:white;font-size:22px;margin:0">🚀 Missions disponibles — Essai gratuit</h2>
+      <p style="color:#bbf7d0;font-size:13px;margin:6px 0 0">Sans inscription · Voir les missions qui correspondent à votre profil</p>`;
+    header.style.background = 'linear-gradient(135deg,#065f46,#059669)';
+  } else {
+    header.innerHTML = `
+      <button onclick="closeModal('demo')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">×</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:1px">MODE DÉMO</span>
+        <span id="demo-step-badge" style="background:var(--blue2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:white">Étape 1 / 3</span>
+      </div>
+      <h2 style="color:white;font-size:22px;margin:0">🤖 Matching IA — Essai gratuit</h2>
+      <p style="color:#bfdbfe;font-size:13px;margin:6px 0 0">Aucune inscription requise · Résultats en temps réel</p>`;
+    header.style.background = 'linear-gradient(135deg,#1e3a8a,#2563eb)';
+  }
+
   document.getElementById('demo-step-1').style.display = 'block';
   document.getElementById('demo-step-2').style.display = 'none';
   document.getElementById('demo-step-3').style.display = 'none';
@@ -2339,7 +2423,13 @@ function selectDemoType(btn) {
 
 function autofillDemo() {
   document.getElementById('demo-sector').value = 'tech';
-  document.querySelectorAll('.demo-type-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  document.querySelectorAll('#demo-mission-type .demo-type-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+}
+
+function autofillDemoAgent() {
+  document.getElementById('demo-agent-spec').value = 'tech';
+  document.getElementById('demo-agent-xp').value = document.getElementById('demo-agent-xp').options[1].value;
+  document.querySelectorAll('#demo-commission-type .demo-type-btn').forEach((b,i) => b.classList.toggle('active', i===1));
 }
 
 function runDemoStep2() {
@@ -2400,20 +2490,25 @@ function runDemoStep2() {
   const subEl = document.getElementById('demo-ai-sub');
   logEl.innerHTML = '';
   let step = 0;
-  const titles = ['Analyse en cours…','Scoring des profils…','Filtrage IA…','Finalisation…'];
-  const subs = ['Initialisation du moteur IA','Lecture de 57 412 agents','Calcul de compatibilité','Sélection des meilleurs profils'];
+  const titles = demoMode === 'agent'
+    ? ['Analyse de votre profil…','Recherche de missions…','Calcul des gains…','Finalisation…']
+    : ['Analyse en cours…','Scoring des profils…','Filtrage IA…','Finalisation…'];
+  const subs = demoMode === 'agent'
+    ? ['Initialisation du moteur IA','Scan de 2 847 missions actives','Calcul de compatibilité profil','Sélection des meilleures missions']
+    : ['Initialisation du moteur IA','Lecture de 57 412 agents','Calcul de compatibilité','Sélection des meilleurs profils'];
+  const logs = demoMode === 'agent' ? AGENT_DEMO_LOGS : DEMO_LOGS;
 
   demoInterval = setInterval(() => {
-    if (step < DEMO_LOGS.length) {
+    if (step < logs.length) {
       const line = document.createElement('div');
-      line.textContent = DEMO_LOGS[step];
+      line.textContent = logs[step];
       line.style.opacity = '0';
       line.style.transition = 'opacity .3s';
       logEl.appendChild(line);
       setTimeout(() => line.style.opacity = '1', 30);
       logEl.scrollTop = logEl.scrollHeight;
 
-      const pct = Math.round(((step+1) / DEMO_LOGS.length) * 100);
+      const pct = Math.round(((step+1) / logs.length) * 100);
       barEl.style.width = pct + '%';
       pctEl.textContent = pct + '%';
       if (titles[Math.floor(step/3)]) titleEl.textContent = titles[Math.floor(step/3)];
@@ -2427,39 +2522,107 @@ function runDemoStep2() {
 }
 
 function runDemoStep3() {
-  const sector = document.getElementById('demo-sector')?.value || 'tech';
-  const agents = DEMO_AGENTS[sector] || DEMO_AGENTS.tech;
-
   document.getElementById('demo-step-2').style.display = 'none';
   document.getElementById('demo-step-3').style.display = 'block';
   document.getElementById('demo-step-badge').textContent = 'Étape 3 / 3';
   document.getElementById('demo-progress-bar').style.width = '100%';
 
-  const container = document.getElementById('demo-results');
-  container.innerHTML = '';
+  if (demoMode === 'agent') {
+    // ─── VUE AGENT : affiche des missions disponibles ───
+    const spec = document.getElementById('demo-agent-spec')?.value || 'tech';
+    const missions = DEMO_MISSIONS[spec] || DEMO_MISSIONS.tech;
 
-  agents.forEach((a, i) => {
-    setTimeout(() => {
-      const card = document.createElement('div');
-      card.className = 'demo-agent-card';
-      card.style.animationDelay = `${i * 0.12}s`;
-      card.innerHTML = `
-        <div class="demo-avatar" style="background:rgba(37,99,235,0.1)">${a.emoji}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:700;color:var(--text1);font-size:15px">${a.name} <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px">● Disponible</span></div>
-          <div style="color:var(--text2);font-size:12px;margin:2px 0">${a.title} · ${a.xp} d'expérience</div>
-          <div style="color:var(--blue3);font-size:11px">${a.specs} · ${a.zone}</div>
-          <div class="demo-score-bar" style="width:${a.score}%;margin-top:6px"></div>
-        </div>
-        <div style="text-align:center;flex-shrink:0">
-          <div class="demo-score">${a.score}%</div>
-          <div style="font-size:10px;color:var(--text2);font-weight:600">match</div>
-          <button onclick="closeModal('demo');showPage('pricing');setActiveByPage('pricing')" style="margin-top:6px;background:var(--blue2);color:white;border:none;padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600">Contacter →</button>
-        </div>
-      `;
-      container.appendChild(card);
-    }, i * 200);
-  });
+    document.getElementById('demo-step3-title').textContent = '💼 3 missions matchées pour vous';
+    document.getElementById('demo-step3-sub').innerHTML = `Trouvées parmi <b style="color:var(--green)">2 847</b> missions actives · Score moyen <b style="color:var(--green)">91%</b>`;
+    document.getElementById('demo-step3-badge').style.background = 'rgba(16,185,129,0.1)';
+    document.getElementById('demo-step3-badge').style.color = 'var(--green)';
+    document.getElementById('demo-step3-badge').style.borderColor = 'rgba(16,185,129,0.2)';
+    document.getElementById('demo-step3-badge').textContent = '✓ DÉMO AGENT';
+
+    const container = document.getElementById('demo-results');
+    container.innerHTML = '';
+    missions.forEach((m, i) => {
+      setTimeout(() => {
+        const card = document.createElement('div');
+        card.className = 'demo-agent-card';
+        card.innerHTML = `
+          <div class="demo-avatar" style="background:rgba(16,185,129,0.1)">${m.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;color:var(--text1);font-size:14px">${m.company} <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px">● Active</span></div>
+            <div style="color:var(--text2);font-size:12px;margin:2px 0">${m.mission} · ${m.location}</div>
+            <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
+              <span style="background:rgba(16,185,129,0.08);color:var(--green);font-size:11px;padding:2px 8px;border-radius:8px;font-weight:700">💰 ${m.commission}</span>
+              <span style="background:rgba(37,99,235,0.08);color:var(--blue3);font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600">📅 ${m.duree}</span>
+              <span style="background:rgba(124,58,237,0.08);color:#7c3aed;font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600">📈 ~${m.potentiel}/mois</span>
+            </div>
+            <div class="demo-score-bar" style="width:${m.score}%;margin-top:6px;background:linear-gradient(90deg,var(--green),#34d399)"></div>
+          </div>
+          <div style="text-align:center;flex-shrink:0">
+            <div class="demo-score" style="color:var(--green);border-color:rgba(16,185,129,0.2)">${m.score}%</div>
+            <div style="font-size:10px;color:var(--text2);font-weight:600">match</div>
+            <button onclick="closeModal('demo');showModal('signup-agent')" style="margin-top:6px;background:var(--green);color:white;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600">Postuler →</button>
+          </div>
+        `;
+        container.appendChild(card);
+      }, i * 200);
+    });
+
+    // CTA paywall agent
+    document.getElementById('demo-paywall').innerHTML = `
+      <p style="font-size:13px;color:var(--text2);margin:0 0 4px">Ces missions vous correspondent à <b style="color:var(--text1)">91% en moyenne</b></p>
+      <p style="font-size:13px;color:var(--text2);margin:0 0 16px">Créez votre profil gratuit pour accéder aux contacts et postuler</p>
+      <button class="btn btn-primary glow-btn" style="padding:14px 28px;font-size:15px;background:var(--green);box-shadow:0 4px 20px rgba(16,185,129,0.3)" onclick="closeModal('demo');showModal('signup-agent')">
+        🚀 Créer mon profil agent — Gratuit
+      </button>
+      <p style="font-size:11px;color:var(--text2);margin:10px 0 0">100% gratuit pour les agents · Aucune carte requise · Accès immédiat</p>
+    `;
+
+  } else {
+    // ─── VUE ENTREPRISE : affiche des profils d'agents ───
+    const sector = document.getElementById('demo-sector')?.value || 'tech';
+    const agents = DEMO_AGENTS[sector] || DEMO_AGENTS.tech;
+
+    document.getElementById('demo-step3-title').textContent = '🎯 3 profils matchés pour vous';
+    document.getElementById('demo-step3-sub').innerHTML = `Analysés parmi <b style="color:var(--blue3)">57 412</b> agents · Score moyen <b style="color:var(--green)">91%</b>`;
+    document.getElementById('demo-step3-badge').style.background = 'rgba(16,185,129,0.1)';
+    document.getElementById('demo-step3-badge').style.color = 'var(--green)';
+    document.getElementById('demo-step3-badge').style.borderColor = 'rgba(16,185,129,0.2)';
+    document.getElementById('demo-step3-badge').textContent = '✓ DÉMO';
+
+    const container = document.getElementById('demo-results');
+    container.innerHTML = '';
+    agents.forEach((a, i) => {
+      setTimeout(() => {
+        const card = document.createElement('div');
+        card.className = 'demo-agent-card';
+        card.innerHTML = `
+          <div class="demo-avatar" style="background:rgba(37,99,235,0.1)">${a.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;color:var(--text1);font-size:15px">${a.name} <span style="background:rgba(16,185,129,0.1);color:var(--green);font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px">● Disponible</span></div>
+            <div style="color:var(--text2);font-size:12px;margin:2px 0">${a.title} · ${a.xp} d'expérience</div>
+            <div style="color:var(--blue3);font-size:11px">${a.specs} · ${a.zone}</div>
+            <div class="demo-score-bar" style="width:${a.score}%;margin-top:6px"></div>
+          </div>
+          <div style="text-align:center;flex-shrink:0">
+            <div class="demo-score">${a.score}%</div>
+            <div style="font-size:10px;color:var(--text2);font-weight:600">match</div>
+            <button onclick="closeModal('demo');showPage('pricing');setActiveByPage('pricing')" style="margin-top:6px;background:var(--blue2);color:white;border:none;padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600">Contacter →</button>
+          </div>
+        `;
+        container.appendChild(card);
+      }, i * 200);
+    });
+
+    // CTA paywall entreprise
+    document.getElementById('demo-paywall').innerHTML = `
+      <p style="font-size:13px;color:var(--text2);margin:0 0 4px">Ces résultats sont basés sur <b style="color:var(--text1)">57 412 profils réels</b></p>
+      <p style="font-size:13px;color:var(--text2);margin:0 0 16px">Débloquez les contacts, CV et disponibilités dès maintenant</p>
+      <button class="btn btn-primary glow-btn" style="padding:14px 28px;font-size:15px" onclick="closeModal('demo');showPage('pricing');setActiveByPage('pricing')">
+        🚀 Accéder aux vrais profils → Voir les offres
+      </button>
+      <p style="font-size:11px;color:var(--text2);margin:10px 0 0">À partir de 89€/mois · Sans engagement · Résiliation en 1 clic</p>
+    `;
+  }
 }
 
 
@@ -2789,8 +2952,8 @@ function processAIInput(text) {
 <div id="modal-demo" class="modal-overlay" onclick="if(event.target===this)closeModal('demo')" style="display:none;z-index:3000">
   <div class="modal-box" style="max-width:600px;padding:0;overflow:hidden">
 
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:28px 32px 20px;position:relative">
+    <!-- Header (dynamically updated by openDemo) -->
+    <div id="demo-modal-header" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:28px 32px 20px;position:relative">
       <button onclick="closeModal('demo')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">×</button>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
         <span style="background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:1px">MODE DÉMO</span>
@@ -2805,10 +2968,12 @@ function processAIInput(text) {
       <div id="demo-progress-bar" style="height:100%;background:linear-gradient(90deg,#2563eb,#7c3aed);width:33%;transition:width .5s ease"></div>
     </div>
 
-    <!-- STEP 1: Form -->
+    <!-- STEP 1: Form (contains both enterprise + agent forms) -->
     <div id="demo-step-1" style="padding:28px 32px">
-      <h3 style="color:var(--text1);margin:0 0 20px;font-size:17px">Décrivez votre besoin en 3 clics</h3>
-      <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- FORMULAIRE ENTREPRISE -->
+      <div id="demo-form-entreprise" style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="color:var(--text1);margin:0 0 6px;font-size:17px">🏢 Décrivez votre besoin en 3 clics</h3>
         <div>
           <label style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Secteur d'activité</label>
           <select id="demo-sector" style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text1);font-size:14px">
@@ -2839,15 +3004,58 @@ function processAIInput(text) {
             <button class="demo-type-btn" onclick="selectDemoType(this)" data-val="bdr">📞 BDR / SDR</button>
           </div>
         </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+          <button class="btn btn-primary" style="flex:1;padding:14px" onclick="runDemoStep2()">
+            ✨ Trouver des agents IA →
+          </button>
+          <button onclick="autofillDemo()" style="background:none;border:1.5px dashed var(--border);color:var(--text2);padding:14px 16px;border-radius:10px;cursor:pointer;font-size:12px;white-space:nowrap">
+            ⚡ Auto-remplir
+          </button>
+        </div>
       </div>
-      <div style="margin-top:24px;display:flex;gap:12px;align-items:center">
-        <button class="btn btn-primary" style="flex:1;padding:14px" onclick="runDemoStep2()">
-          ✨ Lancer l'analyse IA →
-        </button>
-        <button onclick="autofillDemo()" style="background:none;border:1.5px dashed var(--border);color:var(--text2);padding:14px 16px;border-radius:10px;cursor:pointer;font-size:12px;white-space:nowrap">
-          ⚡ Auto-remplir
-        </button>
+
+      <!-- FORMULAIRE AGENT -->
+      <div id="demo-form-agent" style="display:none;flex-direction:column;gap:14px">
+        <h3 style="color:var(--text1);margin:0 0 6px;font-size:17px">👤 Votre profil en 3 informations</h3>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Votre spécialité</label>
+          <select id="demo-agent-spec" style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text1);font-size:14px">
+            <option value="tech">💻 Tech / SaaS / Digital</option>
+            <option value="immo">🏠 Immobilier</option>
+            <option value="finance">💰 Finance / Assurance</option>
+            <option value="industrie">🏭 Industrie / BTP</option>
+            <option value="sante">🏥 Santé / Pharma</option>
+            <option value="retail">🛍️ Retail / E-commerce</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Votre expérience</label>
+          <select id="demo-agent-xp" style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text1);font-size:14px">
+            <option>🌱 Débutant — moins de 2 ans</option>
+            <option selected>💼 Confirmé — 2 à 5 ans</option>
+            <option>⭐ Expert — 5 à 10 ans</option>
+            <option>🏆 Senior — plus de 10 ans</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Commission souhaitée</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="demo-commission-type">
+            <button class="demo-type-btn" onclick="selectDemoType(this)" data-val="10">10%</button>
+            <button class="demo-type-btn active" onclick="selectDemoType(this)" data-val="15">15%</button>
+            <button class="demo-type-btn" onclick="selectDemoType(this)" data-val="20">20%</button>
+            <button class="demo-type-btn" onclick="selectDemoType(this)" data-val="20p">+20%</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+          <button class="btn btn-primary" style="flex:1;padding:14px;background:var(--green);box-shadow:0 4px 16px rgba(16,185,129,0.3)" onclick="runDemoStep2()">
+            🚀 Voir les missions disponibles →
+          </button>
+          <button onclick="autofillDemoAgent()" style="background:none;border:1.5px dashed var(--border);color:var(--text2);padding:14px 16px;border-radius:10px;cursor:pointer;font-size:12px;white-space:nowrap">
+            ⚡ Auto-remplir
+          </button>
+        </div>
       </div>
+
     </div>
 
     <!-- STEP 2: AI Animation -->
@@ -2867,26 +3075,20 @@ function processAIInput(text) {
       <p id="demo-ai-pct" style="color:var(--blue3);font-size:13px;font-weight:700;margin:8px 0 0">0%</p>
     </div>
 
-    <!-- STEP 3: Results -->
+    <!-- STEP 3: Results (content injected dynamically by runDemoStep3) -->
     <div id="demo-step-3" style="display:none;padding:28px 32px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div>
-          <h3 style="color:var(--text1);margin:0;font-size:17px">🎯 3 profils matchés pour vous</h3>
-          <p style="color:var(--text2);font-size:12px;margin:4px 0 0">Analysés parmi <b style="color:var(--blue3)">57 412</b> agents · Score moyen <b style="color:var(--green)">91%</b></p>
+          <h3 id="demo-step3-title" style="color:var(--text1);margin:0;font-size:17px">🎯 3 profils matchés pour vous</h3>
+          <p id="demo-step3-sub" style="color:var(--text2);font-size:12px;margin:4px 0 0">Analysés parmi <b style="color:var(--blue3)">57 412</b> agents · Score moyen <b style="color:var(--green)">91%</b></p>
         </div>
-        <span style="background:rgba(16,185,129,0.1);color:var(--green);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid rgba(16,185,129,0.2)">✓ DÉMO</span>
+        <span id="demo-step3-badge" style="background:rgba(16,185,129,0.1);color:var(--green);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid rgba(16,185,129,0.2)">✓ DÉMO</span>
       </div>
 
       <div id="demo-results" style="display:flex;flex-direction:column;gap:12px"></div>
 
-      <!-- Paywall CTA -->
-      <div style="margin-top:20px;background:linear-gradient(135deg,rgba(37,99,235,0.08),rgba(124,58,237,0.08));border:1.5px solid rgba(37,99,235,0.2);border-radius:14px;padding:20px;text-align:center">
-        <p style="font-size:13px;color:var(--text2);margin:0 0 4px">Ces résultats sont basés sur <b style="color:var(--text1)">57 412 profils réels</b></p>
-        <p style="font-size:13px;color:var(--text2);margin:0 0 16px">Débloquez les contacts, CV et disponibilités dès maintenant</p>
-        <button class="btn btn-primary glow-btn" style="padding:14px 28px;font-size:15px" onclick="closeModal('demo');showPage('pricing');setActiveByPage('pricing')">
-          🚀 Accéder aux vrais profils → Voir les offres
-        </button>
-        <p style="font-size:11px;color:var(--text2);margin:10px 0 0">À partir de 89€/mois · Sans engagement · Résiliation en 1 clic</p>
+      <!-- Paywall CTA (content injected dynamically) -->
+      <div id="demo-paywall" style="margin-top:20px;background:linear-gradient(135deg,rgba(37,99,235,0.08),rgba(124,58,237,0.08));border:1.5px solid rgba(37,99,235,0.2);border-radius:14px;padding:20px;text-align:center">
       </div>
     </div>
 
