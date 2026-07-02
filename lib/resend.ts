@@ -19,7 +19,7 @@ export async function sendEmail({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'AgentMatch AI <noreply@agentmatch.ai>',
+      from: 'AgentPrime AI <noreply@agentprime.fr>',
       to,
       subject,
       html,
