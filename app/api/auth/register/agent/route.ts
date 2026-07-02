@@ -16,10 +16,11 @@ export async function POST(req: NextRequest) {
     email,
     password,
     email_confirm: true,
+    user_metadata: { role: 'AGENT' },
   })
 
   if (authError || !authData.user) {
-    return NextResponse.json({ error: authError?.message || 'Erreur création compte' }, { status: 400 })
+    return NextResponse.json({ error: authError?.message || 'Erreur cr\u00e9ation compte' }, { status: 400 })
   }
 
   const { error: profileError } = await admin.from('agent_profiles').insert({
@@ -39,13 +40,15 @@ export async function POST(req: NextRequest) {
   })
 
   if (profileError) {
+    // Rollback auth user to avoid orphaned accounts
+    await admin.auth.admin.deleteUser(authData.user.id)
     return NextResponse.json({ error: profileError.message }, { status: 400 })
   }
 
   await sendEmail({
     to: email,
-    subject: 'Bienvenue sur AgentMatch AI',
-    html: `<h1>Bienvenue ${first_name} !</h1><p>Votre profil agent a bien été créé.</p><p><a href="https://agentmatch-next.netlify.app/dashboard">Accéder à mon dashboard</a></p>`,
+    subject: 'Bienvenue sur AgentPrime AI',
+    html: `<h1>Bienvenue ${first_name} !</h1><p>Votre profil agent a bien \u00e9t\u00e9 cr\u00e9\u00e9 sur AgentPrime AI.</p><p><a href="https://agentprime.fr/dashboard">Acc\u00e9der \u00e0 mon dashboard</a></p>`,
   })
 
   return NextResponse.json({ success: true }, { status: 201 })
