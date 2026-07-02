@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     email,
     password,
     email_confirm: true,
-    user_metadata: { role: 'AGENT' },
+    data: { role: 'AGENT' },
   })
 
   if (authError || !authData.user) {
