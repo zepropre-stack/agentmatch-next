@@ -2835,7 +2835,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           <li><span class="feat-check">✓</span><span class="feat-text">Assistant IA illimité</span></li>
           <li><span class="feat-cross">✗</span><span class="feat-text" style="color:var(--text3)">Recherche IA illimitée</span></li>
         </ul>
-        <button class="btn btn-primary w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/bJefZhb0k9Dl4cY0a54c80d','_blank')">
+        <button class="btn btn-primary w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/bJefZhbOk9Dl4cY0a54c80d','_blank')">
           🚀 Commencer l'essai gratuit →
         </button>
       </div>
@@ -2859,7 +2859,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           <li><span class="feat-check">✓</span><span class="feat-text"><b>Account manager dédié</b></span></li>
           <li><span class="feat-check">✓</span><span class="feat-text">Export données & API</span></li>
         </ul>
-        <button class="btn btn-gold w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/fZudR9b0k8zhbFq9KF4c80e','_blank')">
+        <button class="btn btn-gold w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/fZudR9bOk8zhbFq9KF4c80e','_blank')">
           👑 Commencer l'essai gratuit →
         </button>
       </div>
@@ -4890,8 +4890,8 @@ async function submitAgentSignup() {
 async function submitCompanySignup() {
   const stripeLinks = {
     'starter':  'https://buy.stripe.com/7sY5kDdWsdTB4cY6yt4c80c',
-    'pro':      'https://buy.stripe.com/bJefZhb0k9Dl4cY0a54c80d',
-    'business': 'https://buy.stripe.com/fZudR9b0k8zhbFq9KF4c80e'
+    'pro':      'https://buy.stripe.com/bJefZhbOk9Dl4cY0a54c80d',
+    'business': 'https://buy.stripe.com/fZudR9bOk8zhbFq9KF4c80e'
   };
   const plan = (typeof currentPlan !== 'undefined' && currentPlan) ? currentPlan.toLowerCase() : 'starter';
   window.open(stripeLinks[plan] || stripeLinks['starter'], '_blank');
