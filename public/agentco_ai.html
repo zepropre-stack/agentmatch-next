@@ -2811,7 +2811,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           <li><span class="feat-cross">✗</span><span class="feat-text" style="color:var(--text3)">Matching IA proactif</span></li>
           <li><span class="feat-cross">✗</span><span class="feat-text" style="color:var(--text3)">Analytics avancés</span></li>
         </ul>
-        <button class="btn btn-ghost w-full" style="padding:14px;border-radius:12px;border-color:var(--blue2);color:var(--blue3)" onclick="selectPlan('starter')">
+        <button class="btn btn-ghost w-full" style="padding:14px;border-radius:12px;border-color:var(--blue2);color:var(--blue3)" onclick="window.open('https://buy.stripe.com/7sY5kDdWsdTB4cY6yt4c80c','_blank')">
           Commencer l'essai gratuit →
         </button>
       </div>
@@ -2835,7 +2835,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           <li><span class="feat-check">✓</span><span class="feat-text">Assistant IA illimité</span></li>
           <li><span class="feat-cross">✗</span><span class="feat-text" style="color:var(--text3)">Recherche IA illimitée</span></li>
         </ul>
-        <button class="btn btn-primary w-full" style="padding:14px;border-radius:12px" onclick="selectPlan('pro')">
+        <button class="btn btn-primary w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/bJefZhb0k9Dl4cY0a54c80d','_blank')">
           🚀 Commencer l'essai gratuit →
         </button>
       </div>
@@ -2859,7 +2859,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
           <li><span class="feat-check">✓</span><span class="feat-text"><b>Account manager dédié</b></span></li>
           <li><span class="feat-check">✓</span><span class="feat-text">Export données & API</span></li>
         </ul>
-        <button class="btn btn-gold w-full" style="padding:14px;border-radius:12px" onclick="selectPlan('business')">
+        <button class="btn btn-gold w-full" style="padding:14px;border-radius:12px" onclick="window.open('https://buy.stripe.com/fZudR9b0k8zhbFq9KF4c80e','_blank')">
           👑 Commencer l'essai gratuit →
         </button>
       </div>
@@ -4888,31 +4888,13 @@ async function submitAgentSignup() {
 
 // ─── INSCRIPTION ENTREPRISE ───
 async function submitCompanySignup() {
-  const name     = document.getElementById('co-name')?.value?.trim();
-  const email    = document.getElementById('co-email')?.value?.trim();
-  const sector   = document.getElementById('co-sector')?.value;
-  const size     = document.getElementById('co-size')?.value;
-  const password = document.getElementById('co-password')?.value;
-  showFieldError('co-signup-error', '');
-  if (!name || !email || !password) { showFieldError('co-signup-error', 'Nom, email et mot de passe requis.'); return; }
-  if (password.length < 8) { showFieldError('co-signup-error', 'Mot de passe : 8 caracteres minimum.'); return; }
-  setBtn('co-signup-btn', 'Creation en cours...', true);
-  try {
-    const data = await apiCall('POST', '/api/auth/register/company', { email, password, name, sector, size });
-    Auth.save(data.token, data.user);
-    closeModal('signup-company');
-    updateNavForUser(data.user);
-    if (currentPlan) {
-      showToast('Compte cree ! Redirection vers le paiement...', 'success');
-      setTimeout(() => launchStripeCheckout(currentPlan), 1200);
-    } else {
-      showToast('Compte entreprise cree ! Verifiez votre email.', 'success');
-    }
-  } catch (err) {
-    showFieldError('co-signup-error', err.message);
-  } finally {
-    setBtn('co-signup-btn', 'Demarrer mon essai gratuit', false);
-  }
+  const stripeLinks = {
+    'starter':  'https://buy.stripe.com/7sY5kDdWsdTB4cY6yt4c80c',
+    'pro':      'https://buy.stripe.com/bJefZhb0k9Dl4cY0a54c80d',
+    'business': 'https://buy.stripe.com/fZudR9b0k8zhbFq9KF4c80e'
+  };
+  const plan = (typeof currentPlan !== 'undefined' && currentPlan) ? currentPlan.toLowerCase() : 'starter';
+  window.open(stripeLinks[plan] || stripeLinks['starter'], '_blank');
 }
 
 // Redirection completePlanSignup (ancienne)
