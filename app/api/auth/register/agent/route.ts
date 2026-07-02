@@ -4,7 +4,10 @@ import { sendEmail } from '@/lib/resend'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { email, password, first_name, last_name, sector, title, experience_years, daily_rate, location, remote, skills, bio } = body
+  const {
+    email, password, first_name, last_name, sector, title,
+    experience_years, daily_rate, location, remote, skills, bio
+  } = body
 
   if (!email || !password) {
     return NextResponse.json({ error: 'Email et mot de passe requis' }, { status: 400 })
@@ -20,13 +23,13 @@ export async function POST(req: NextRequest) {
   })
 
   if (authError || !authData.user) {
-    return NextResponse.json({ error: authError?.message || 'Erreur cr\u00e9ation compte' }, { status: 400 })
+    return NextResponse.json({ error: authError?.message || 'Erreur creation compte' }, { status: 400 })
   }
 
   const { error: profileError } = await admin.from('agent_profiles').insert({
     user_id: authData.user.id,
-    first_name,
-    last_name,
+    first_name: first_name || '',
+    last_name: last_name || '',
     email,
     sector: sector || '',
     title: title || '',
@@ -40,15 +43,13 @@ export async function POST(req: NextRequest) {
   })
 
   if (profileError) {
-    // Rollback auth user to avoid orphaned accounts
-    await admin.auth.admin.deleteUser(authData.user.id)
     return NextResponse.json({ error: profileError.message }, { status: 400 })
   }
 
   await sendEmail({
     to: email,
     subject: 'Bienvenue sur AgentPrime AI',
-    html: `<h1>Bienvenue ${first_name} !</h1><p>Votre profil agent a bien \u00e9t\u00e9 cr\u00e9\u00e9 sur AgentPrime AI.</p><p><a href="https://agentprime.fr/dashboard">Acc\u00e9der \u00e0 mon dashboard</a></p>`,
+    html: '<h1>Bienvenue ' + (first_name || '') + ' !</h1><p>Votre compte AgentPrime AI a bien ete cree.</p><p><a href="https://agentprime.fr/dashboard">Acceder a mon dashboard</a></p>',
   })
 
   return NextResponse.json({ success: true }, { status: 201 })
