@@ -8,19 +8,11 @@ const PLANS: Record<string, { name: string; price: number; color: string }> = {
   business: { name: 'Business', price: 219, color: '#f59e0b' },
 }
 
-interface Stats {
-  applications: number
-  matches: number
-  missions: number
-  views: number
-}
-
 export default function DashboardPage() {
   const router = useRouter()
   const [role, setRole] = useState<string | null>(null)
   const [profile, setProfile] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
-  const [stats] = useState<Stats>({ applications: 0, matches: 0, missions: 0, views: 0 })
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -34,7 +26,7 @@ export default function DashboardPage() {
         setProfile(d.profile)
         setLoading(false)
       })
-      .catch(() => router.push('/login'))
+      .catch(() => { router.push('/login') })
   }, [router])
 
   if (loading) {
@@ -47,34 +39,34 @@ export default function DashboardPage() {
 
   const plan = (profile as { plan?: string } | null)?.plan
   const planInfo = plan ? PLANS[plan.toLowerCase()] : null
-  const firstName =
-    role === 'AGENT'
-      ? (profile as { first_name?: string } | null)?.first_name
-      : (profile as { name?: string } | null)?.name?.split(' ')[0]
+  const firstName = role === 'AGENT'
+    ? (profile as { first_name?: string } | null)?.first_name
+    : (profile as { name?: string } | null)?.name?.split(' ')[0]
 
   const profileComplete = role === 'AGENT'
     ? !!(profile as { title?: string } | null)?.title
     : !!(profile as { name?: string } | null)?.name
 
   const agentStats = [
-    { value: stats.applications, label: 'Candidatures envoy\u00e9es', icon: '\u{1F4EC}', color: 'var(--blue)' },
-    { value: stats.matches, label: 'Matchings IA', icon: '\u{1F916}', color: 'var(--purple)' },
-    { value: stats.views, label: 'Vues de profil', icon: '\u{1F441}\uFE0F', color: 'var(--green)' },
+    { value: 0, label: 'Candidatures envoyées', icon: '📬', color: 'var(--blue)' },
+    { value: 0, label: 'Matchings IA', icon: '🤖', color: 'var(--purple)' },
+    { value: 0, label: 'Vues de profil', icon: '👁️', color: 'var(--green)' },
   ]
 
   const companyStats = [
-    { value: stats.missions, label: 'Missions actives', icon: '\u{1F4CB}', color: 'var(--blue)' },
-    { value: stats.applications, label: 'Candidatures re\u00e7ues', icon: '\u{1F4E5}', color: 'var(--purple)' },
-    { value: stats.matches, label: 'Matchings IA', icon: '\u{1F916}', color: 'var(--green)' },
+    { value: 0, label: 'Missions actives', icon: '📋', color: 'var(--blue)' },
+    { value: 0, label: 'Candidatures reçues', icon: '📥', color: 'var(--purple)' },
+    { value: 0, label: 'Matchings IA', icon: '🤖', color: 'var(--green)' },
   ]
 
   const currentStats = role === 'AGENT' ? agentStats : companyStats
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', padding: '32px', maxWidth: '1200px', margin: '0 auto' }}>
+
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8, background: 'linear-gradient(135deg, #fff 60%, #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Bonjour, {firstName || 'vous'} \u{1F44B}
+          {'Bonjour, ' + (firstName || 'vous') + ' 👋'}
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.5)' }}>Votre tableau de bord AgentPrime AI</p>
       </div>
@@ -89,15 +81,15 @@ export default function DashboardPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          flexWrap: 'wrap',
+          flexWrap: 'wrap' as const,
           gap: 12,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 24 }}>\u26A0\uFE0F</span>
+            <span style={{ fontSize: 24 }}>{'⚠️'}</span>
             <div>
               <p style={{ fontWeight: 600, color: '#a78bfa', margin: 0 }}>Profil incomplet</p>
               <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-                Compl\u00e9tez votre profil pour appara\u00eetre dans les r\u00e9sultats de matching
+                {'Complétez votre profil pour apparaître dans les résultats de matching'}
               </p>
             </div>
           </div>
@@ -111,10 +103,10 @@ export default function DashboardPage() {
               textDecoration: 'none',
               fontWeight: 600,
               fontSize: 14,
-              whiteSpace: 'nowrap',
+              whiteSpace: 'nowrap' as const,
             }}
           >
-            Compl\u00e9ter mon profil \u2192
+            {'Compléter mon profil →'}
           </a>
         </div>
       )}
@@ -130,10 +122,10 @@ export default function DashboardPage() {
           alignItems: 'center',
           gap: 12,
         }}>
-          <span style={{ fontSize: 24 }}>\u2B50</span>
+          <span style={{ fontSize: 24 }}>{'⭐'}</span>
           <div>
-            <p style={{ fontWeight: 600, color: planInfo.color, margin: 0 }}>Plan {planInfo.name}</p>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', margin: 0 }}>{planInfo.price}\u20AC/mois</p>
+            <p style={{ fontWeight: 600, color: planInfo.color, margin: 0 }}>{'Plan ' + planInfo.name}</p>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', margin: 0 }}>{planInfo.price + '€/mois'}</p>
           </div>
         </div>
       )}
@@ -150,28 +142,29 @@ export default function DashboardPage() {
 
       <div style={{ background: 'var(--card)', borderRadius: 12, padding: 24, border: '1px solid var(--border)' }}>
         <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>Actions rapides</h2>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' as const }}>
           {role === 'AGENT' ? (
             <>
               <a href="/missions" style={{ background: 'linear-gradient(135deg, #6366f1, #a78bfa)', color: 'white', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontWeight: 500 }}>
-                \u{1F50D} Voir les missions
+                {'🔍 Voir les missions'}
               </a>
               <a href="/dashboard/profil" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(255,255,255,0.12)' }}>
-                \u270F\uFE0F Mon profil
+                {'✏️ Mon profil'}
               </a>
             </>
           ) : (
             <>
               <a href="/dashboard/missions" style={{ background: 'linear-gradient(135deg, #6366f1, #a78bfa)', color: 'white', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontWeight: 500 }}>
-                \u2795 Publier une mission
+                {'➕ Publier une mission'}
               </a>
               <a href="/dashboard/matching" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(255,255,255,0.12)' }}>
-                \u{1F916} Matching IA
+                {'🤖 Matching IA'}
               </a>
             </>
           )}
         </div>
       </div>
+
     </div>
   )
     }
