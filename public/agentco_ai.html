@@ -824,6 +824,15 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgb
 }
 
 </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    var _supabase = window.supabase.createClient('https://exebntadmiraqlgkpwnm.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4ZWJudGFkbWlyYXFsZ2twd25tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NzA0MjQsImV4cCI6MjA5ODA0NjQyNH0._yzF_Les3AOAfyjUyEymlkWFKjN5lb4-yoLvMpzt7t8');
+    _supabase.auth.onAuthStateChange(function(ev,sess){
+      if(ev==='SIGNED_IN'&&sess){try{updateNavForUser(sess.user);}catch(e){}}
+      if(ev==='SIGNED_OUT'){try{updateNavForUser(null);}catch(e){}}
+    });
+  </script>
 </head>
 <body>
 
@@ -4819,27 +4828,19 @@ function showFieldError(id, msg) {
 }
 
 // ─── CONNEXION ───
-async function submitLogin() {
-  const email    = document.getElementById('login-email')?.value?.trim();
-  const password = document.getElementById('login-password')?.value;
-  showFieldError('login-error', '');
-  if (!email || !password) { showFieldError('login-error', 'Remplissez tous les champs.'); return; }
-  setBtn('login-btn', 'Connexion en cours…', true);
-  try {
-    const data = await apiCall('POST', '/api/auth/login', { email, password });
-    Auth.save(data.token, data.user);
-    closeModal('login');
-    updateNavForUser(data.user);
-    showToast('Bienvenue ' + (data.user.profile?.firstName || data.user.email) + ' !', 'success');
-    const activePage = document.querySelector('.page.active')?.id?.replace('page-', '');
-    if (activePage === 'missions') renderMissions();
-    if (activePage === 'agents')   renderAgents();
-    if (activePage === 'dashboard') loadDashboard();
-  } catch (err) {
-    showFieldError('login-error', err.message);
-  } finally {
-    setBtn('login-btn', 'Se connecter', false);
-  }
+function submitLogin() {
+  var em=document.getElementById('login-email')?.value?.trim(),pw=document.getElementById('login-password')?.value;
+  showFieldError('login-error','');
+  if(!em||!pw){showFieldError('login-error','Email et mot de passe requis.');return;}
+  setBtn('login-btn','Connexion…',true);
+  _supabase.auth.signInWithPassword({email:em,password:pw}).then(function(res){
+    setBtn('login-btn','Se connecter',false);
+    if(res.error){showFieldError('login-error','Email ou mot de passe incorrect.');return;}
+    var u=res.data.user,role=(u.user_metadata&&u.user_metadata.role)||'agent';
+    closeModal('login');updateNavForUser(u);
+    showPage(role==='company'?'dashboard-company':'dashboard');
+    showToast('Bienvenue '+((u.user_metadata&&u.user_metadata.firstName)||u.email)+' !');
+  });
 }
 
 async function submitForgotPassword() {
@@ -4852,38 +4853,18 @@ async function submitForgotPassword() {
 }
 
 // ─── INSCRIPTION AGENT ───
-async function submitAgentSignup() {
-  const firstName = document.getElementById('agent-firstName')?.value?.trim();
-  const lastName  = document.getElementById('agent-lastName')?.value?.trim();
-  const email     = document.getElementById('agent-email')?.value?.trim();
-  const phone     = document.getElementById('agent-phone')?.value?.trim();
-  const sector    = document.getElementById('agent-sector')?.value;
-  const region    = document.getElementById('agent-region')?.value;
-  const password  = document.getElementById('agent-password')?.value;
-  showFieldError('agent-signup-error', '');
-  if (!firstName || !lastName || !email || !password) {
-    showFieldError('agent-signup-error', 'Prenom, nom, email et mot de passe requis.'); return;
-  }
-  if (password.length < 8) { showFieldError('agent-signup-error', 'Mot de passe : 8 caracteres minimum.'); return; }
-  setBtn('agent-signup-btn', 'Creation en cours...', true);
-  try {
-    const data = await apiCall('POST', '/api/auth/register/agent', {
-      firstName, lastName, email, phone,
-      title: 'Agent commercial',
-      city: region, region,
-      sectors: [sector],
-      skills: [],
-      password
-    });
-    Auth.save(data.token, data.user);
+function submitAgentSignup() {
+  var fn=document.getElementById('agent-firstName')?.value?.trim(),ln=document.getElementById('agent-lastName')?.value?.trim(),em=document.getElementById('agent-email')?.value?.trim(),ph=document.getElementById('agent-phone')?.value?.trim(),sc=document.getElementById('agent-sector')?.value,rg=document.getElementById('agent-region')?.value,pw=document.getElementById('agent-password')?.value;
+  showFieldError('agent-signup-error','');
+  if(!fn||!em||!pw){showFieldError('agent-signup-error','Prénom, email et mot de passe requis.');return;}
+  if(pw.length<8){showFieldError('agent-signup-error','Mot de passe : 8 caractères minimum.');return;}
+  setBtn('agent-signup-btn','Création…',true);
+  _supabase.auth.signUp({email:em,password:pw,options:{data:{firstName:fn,lastName:ln,phone:ph,sector:sc,region:rg,role:'agent'}}}).then(function(res){
+    setBtn('agent-signup-btn','Créer mon compte agent',false);
+    if(res.error){showFieldError('agent-signup-error',res.error.message);return;}
     closeModal('signup-agent');
-    updateNavForUser(data.user);
-    showToast('Espace agent cree ! Verifiez votre email.', 'success');
-  } catch (err) {
-    showFieldError('agent-signup-error', err.message);
-  } finally {
-    setBtn('agent-signup-btn', 'Creer mon espace gratuitement', false);
-  }
+    showToast('Compte créé ! Vérifiez votre email pour confirmer.');
+  });
 }
 
 // ─── INSCRIPTION ENTREPRISE ───
